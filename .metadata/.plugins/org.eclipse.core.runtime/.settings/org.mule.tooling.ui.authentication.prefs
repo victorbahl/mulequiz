@@ -1,7 +1,0 @@
-authenticated.users=[{"id"\:"04129bd0-ba42-46a8-8a0c-a6af70378231","token"\:"065d27fd-febb-462c-81c4-7f5a3ec4a30c","userId"\:"vbahl","email"\:"victor.bahl@mulesoft.com","refreshToken"\:"","baseUrl"\:"https\://anypoint.mulesoft.com/","org"\:{"name"\:"VB-demo","id"\:"14190683-4516-4ed4-bfc7-69e8ad890cdb","isMaster"\:true}}]
-current.token=065d27fd-febb-462c-81c4-7f5a3ec4a30c
-current.user=vbahl
-eclipse.preferences.version=1
-expiration.time=200
-org.mule.tooling.amc.apps={"userProjectMap"\:{"vbahl"\:{"stupidpen"\:"{\\"applicationName\\"\:\\"mulequiz\\",\\"muleRuntime\\"\:\\"4.3.0\\",\\"properties\\"\:{\\"env\\"\:\\"prod\\",\\"anypoint.platform.config.analytics.agent.enabled\\"\:\\"true\\"}}","trapide"\:"{\\"applicationName\\"\:\\"trapide\\",\\"muleRuntime\\"\:\\"4.3.0\\",\\"properties\\"\:{}}","itworks"\:"{\\"applicationName\\"\:\\"itworks2\\",\\"muleRuntime\\"\:\\"4.3.0\\",\\"properties\\"\:{}}"}}}
-org.mule.tooling.ui.properties.enable.api.dependencies=true

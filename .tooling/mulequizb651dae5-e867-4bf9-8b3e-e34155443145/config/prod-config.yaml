@@ -1,9 +1,0 @@
-https:
-  port: '8082'
-  private:
-    port: '8092'
-
-http:
-  port: '8081'
-  private:
-    port: '8091'

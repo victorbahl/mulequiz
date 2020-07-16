@@ -1,9 +1,0 @@
-{
-    "type": "action",
-    "sentAt": "2020-06-26T12:33:48Z",
-    "data": {
-      "action": "playerInfo",
-      "sid": "znhcp",
-      "nickname": "Victor"
-    }
-}
