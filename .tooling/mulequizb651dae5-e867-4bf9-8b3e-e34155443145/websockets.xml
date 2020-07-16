@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/websocket http://www.mulesoft.org/schema/mule/websocket/current/mule-websocket.xsd">
+	<websocket:config name="WebSockets_Config" doc:name="WebSockets Config" doc:id="85fac1d1-a205-44ba-9387-99db191c2031" >
+		<websocket:connection >
+			<websocket:server-settings listenerConfig="HTTPS_Listener_config" idleSocketTimeout="3" idleSocketTimeoutUnit="HOURS"/>
+		</websocket:connection>
+	</websocket:config>
+	<flow name="newConnection" doc:id="3f2f890e-92c3-42e1-94d5-449fb8c82f6a" >
+		<websocket:on-inbound-connection doc:name="On New Inbound Connection" doc:id="42b73788-2cbc-4237-99e7-b01e5bd2935e" config-ref="WebSockets_Config" path="/*"/>
+		<logger level="INFO" doc:name="Logger" doc:id="76d6a9f5-daa5-4ccb-984e-ab725a0db9f6" message="#[payload]"/>
+	</flow>
+	<flow name="newMessage" doc:id="2c041a55-c869-477f-b90f-7aa5fb5f3736" >
+		<websocket:inbound-listener doc:name="On New Inbound Message" doc:id="74798db5-803b-4b4f-bf4f-2ca0e0ddc038" config-ref="WebSockets_Config" path="/*"/>
+		<set-variable value="#[%dw 2.0
+import * from dw::core::Strings
+output application/json
+---
+substringAfterLast(attributes.path, '/')]" doc:name="gameId" doc:id="5bea72ee-bc03-4318-91ff-a29f4a8caead" variableName="gameId" />
+		<set-payload value='#[%dw 2.0 
+output application/json 
+--- 
+read(payload,"application/json")]' doc:name="Parse msg" doc:id="33faf1fd-2f6c-40ae-b4b2-b66c70a147a3" />
+		<flow-ref doc:name="gameRouter" doc:id="2c99cfe2-0fd8-4402-bae0-0939cdac2e57" name="gameRouter"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="46413632-688b-48c8-b250-09676f65b737" type="GAMEROUTER:UNKNOW_MESSAGE">
+				<logger level="ERROR" doc:name="Logger" doc:id="dcc5c549-7367-44d3-9ab8-c5f18f816a57" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>

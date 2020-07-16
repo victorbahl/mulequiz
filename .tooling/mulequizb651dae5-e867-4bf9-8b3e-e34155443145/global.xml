@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<global-property doc:name="Global Property" doc:id="2c8a72a1-e2c3-4e4c-a29b-d5eb000b7212" name="env" value="dev" />
+	<configuration-properties doc:name="Configuration properties" doc:id="c789d186-fd38-40a3-a26e-6c0f009c0003" file="config/common-config.yaml" />
+	<configuration-properties doc:name="Configuration properties" doc:id="62a75744-697b-4b31-8efa-a2a344a7ad4a" file="config/${env}-config.yaml" />
+	<http:listener-config name="HTTPS_Listener_config" doc:name="HTTP Listener config" doc:id="8e21775b-73a2-4cfa-9154-30a891657950" >
+		<http:listener-connection host="0.0.0.0" port="${https.private.port}" protocol="HTTPS" tlsContext="TLS_Context"/>
+	</http:listener-config>
+	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="2441e24c-5ddb-4cc4-a847-3a98628ddf42" >
+		<tls:key-store path="other/spserver.jks" alias="spserverkey" keyPassword="StupidPen!" password="StupidPen!" />
+	</tls:context>
+	<os:object-store name="OS_Game" doc:name="Object store" doc:id="2c12a884-c28f-49fd-ab60-573ac3f3d243" entryTtl="1" entryTtlUnit="DAYS"/>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="afbc4742-0473-461a-bce8-5e2edb62dc17" >
+		<db:generic-connection driverClassName="org.postgresql.Driver" url="jdbc:postgresql://${quizDb.host}:${quizDb.port}/${quizDb.database}?sslmode=require" user="${quizDb.user}" password="${quizDb.password}"/>
+	</db:config>
+</mule>

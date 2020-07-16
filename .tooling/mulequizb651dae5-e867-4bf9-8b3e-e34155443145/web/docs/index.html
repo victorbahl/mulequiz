@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <base href="./" target="_blank">
+  
   <title>MuleQuiz Async API 1.0.0 documentation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="css/tailwind.min.css" rel="stylesheet">
@@ -46,7 +46,7 @@
       <li>
         
         <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-          href="#operation-publish-mquiz/{gameId}">
+          href="#operation-publish-mulequiz/{gameId}">
           <span class="bg-blue-dark font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded"
             style="height: 21px;font-size: 11px;" title="Publish">Pub</span>
           
@@ -58,7 +58,7 @@
         
         
         <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-          href="#operation-subscribe-mquiz/{gameId}">
+          href="#operation-subscribe-mulequiz/{gameId}">
           <span class="bg-green-dark font-bold no-underline text-white uppercase p-1 mr-2 rounded"
             style="height: 21px;font-size: 11px;" title="Subscribe">Sub</span>
           
@@ -112,14 +112,13 @@
   </div>
 
   <div class="markdown">
-    <p>MuleQuiz allows you to play with your friends / colleagues and improve your knowledge about MuleSoft.
-This AsyncAPI specification allows you to develop your own client.</p>
-<h3>How to test it:</h3>
+    <p>The MuleQuiz Async API allows you to play with your friends / colleagues and improve your knowledge about MuleSoft.</p>
+<h3>Check out its awesome features:</h3>
 <ul>
-<li>Use a WebSocket client (such as <a href="https://chrome.google.com/webstore/detail/simple-websocket-client/pfdhoblngboilpfeibdedpjgfnlcodoo">Simple WebSocket Client</a> or even <a href="https://www.websocket.org/echo.html">Websocket.org</a>)</li>
-<li>Connect to the WebSocket of the demo room: <em>wss://api.victorbahl.com:443/mquiz/demo</em></li>
-<li>Use the simple MuleQuiz web client to interact: <a href="https://api.victorbahl.com/mquiz/demo">https://api.victorbahl.com/mquiz/demo</a></li>
-<li>Send messages, start the game, play and see the raw messages (JSON) in your WebSocket client 🎉</li>
+<li>Real-time chat while playing 💬</li>
+<li>Async specifications allowing you to easily understand it and develop your own client 📃</li>
+<li>A simple HTML/JS client to test it: <a href="https://api.victorbahl.com/mulequiz">link</a> 🌐</li>
+<li>Documentation of the WebSocket implementation with MuleSoft available here: <a href="https://github.com">link</a> 🎉</li>
 </ul>
 
   </div>
@@ -181,7 +180,7 @@ This AsyncAPI specification allows you to develop your own client.</p>
     
       
 
-<a name="operation-publish-mquiz/{gameId}"></a>
+<a name="operation-publish-mulequiz/{gameId}"></a>
 <div class="center-block p-8">
   <div class="operation pt-8 pb-8">
     <h3 class="font-mono text-base">
@@ -190,7 +189,7 @@ This AsyncAPI specification allows you to develop your own client.</p>
       
       
       
-<span class="string-chunk" >mquiz/{gameId}</span>
+<span class="string-chunk" >mulequiz/{gameId}</span>
 
     </h3>
 
@@ -1596,7 +1595,7 @@ boolean
     
       
 
-<a name="operation-subscribe-mquiz/{gameId}"></a>
+<a name="operation-subscribe-mulequiz/{gameId}"></a>
 <div class="center-block p-8">
   <div class="operation pt-8 pb-8">
     <h3 class="font-mono text-base">
@@ -1606,7 +1605,7 @@ boolean
         title="Subscribe">Sub</span>
       
       
-<span class="string-chunk" >mquiz/{gameId}</span>
+<span class="string-chunk" >mulequiz/{gameId}</span>
 
     </h3>
 

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/websocket http://www.mulesoft.org/schema/mule/websocket/current/mule-websocket.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<flow name="gameRouter" doc:id="76ae8a38-d11e-477d-9a92-a3c814b09725" >
+		<choice doc:name="Choice" doc:id="30b17c9f-5582-496c-b260-9568244d6e0c" >
+			<when expression="#[payload.'type' == &quot;action&quot;]">
+				<flow-ref doc:name="actionMessage" doc:id="8b77416b-4aec-4141-9296-cbe51cd7dfd3" name="actionMessage"/>
+			</when>
+			<when expression="#[payload.'type' == &quot;chat&quot;]" >
+				<flow-ref doc:name="chatMessage" doc:id="56b6e185-022c-4658-8432-e6b2ac34f74c" name="chatMessage"/>
+			</when>
+			<otherwise >
+				<raise-error doc:name="Raise error" doc:id="9dd24c2d-4f98-4a7b-8184-aff3b203ddd7" type="GAMEROUTER:UNKNOW_MESSAGE"/>
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="actionMessage" doc:id="77339bbc-cbd4-45c0-83f0-c40b8bc0cb89">
+		<try doc:name="Try" doc:id="883937a9-fba9-47dc-b17e-11734aeb1223">
+			<os:retrieve doc:name="Game" doc:id="bebb2924-b522-4c55-9bcb-d750ebd1d053" key="#[vars.gameId]" objectStore="OS_Game" target="game" />
+			<error-handler>
+				<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="32332d9b-1413-4d59-98ee-6893fd53d99a" type="OS:INVALID_KEY, OS:KEY_NOT_FOUND">
+							<set-variable value="#[%dw 2.0
+output application/json
+---
+{
+	status: {
+		status: &quot;toBeStarted&quot;,
+		mainMessage: p('settings.textToBeStarted') default &quot;&quot;,
+		timeLeft: p('settings.time') default 0,
+		players: []
+	}
+}]" doc:name="Create Game" doc:id="f7f5124a-0b5f-4dfb-abdc-e5a56d48b723" variableName="game" />
+						</on-error-continue>
+			</error-handler>
+		</try>
+		<choice doc:name="Choice" doc:id="28c3e46e-820f-4086-a182-62377d347894">
+			<when expression='#[payload.data.action == "start"]'>
+				<ee:transform doc:name="Create Quiz" doc:id="5719e66a-8f48-42c1-a52c-a520af03b77f">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var nquiz = lookup("getQuestions", '')
+---
+vars.game update {
+    case s at .status.status -> 'started'
+    case m at .status.mainMessage -> nquiz.current.question
+    case t at .status.timeLeft -> p('settings.time')
+    case players at .status.players ->
+        players map ((p, i) ->
+        (p update { case .score -> 0 }))
+    case q at .quiz! -> nquiz
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression='#[payload.data.action == "playerInfo"]'>
+				<ee:transform doc:name="Create or Update Player" doc:id="0795167c-51ed-48b3-9327-1ea88be76198">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var new_record = (vars.game.status.players[?($.sid==payload.data.sid)] == null)
+---
+if(new_record) // It's a new record, we create one
+    vars.game update {
+        case players at .status.players -> players ++ [{
+            sid: payload.data.sid,
+            nickname: payload.data.nickname,
+            score: payload.data.score default 0
+        }]}
+else // It's not a new record, we update this existing one
+    vars.game update {
+        case players at .status.players ->
+            players map ((p, i) -> 
+                if(p.sid == payload.data.sid) (p update {
+                    case .nickname -> payload.data.nickname // Alter if existing
+                })
+                else p
+            )
+        }]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+			</when>
+			<otherwise>
+				<raise-error doc:name="Raise error" doc:id="2d7b8ca5-41a5-4ed0-b5b2-9d2657acf61a" type="GAMEROUTER:UNKNOW_MESSAGE" />
+			</otherwise>
+		</choice>
+		<os:store doc:name="Game" doc:id="5793d83d-c2d1-4b43-a06a-01252031ed48" key="#[vars.gameId]" objectStore="OS_Game" />
+		<flow-ref doc:name="sendStatus" doc:id="55fda49c-056f-4d7f-93fa-ce4a12d7bf49" name="sendStatus" />
+	</flow>
+	<flow name="chatMessage" doc:id="ee210d14-63eb-4191-8e56-2c4cf7eabbc2">
+		<os:retrieve doc:name="game" doc:id="1de3074c-5066-4149-afbd-68fae744e588" key="#[vars.gameId]" objectStore="OS_Game" target="game">
+				<os:default-value><![CDATA[#[{
+	status:
+		status: "none"
+}]]]></os:default-value>
+			</os:retrieve>
+		<set-variable value="#[%dw 2.0
+output application/java
+var message = payload.data.text default &quot;&quot;
+var answer = vars.game.quiz.current.answer default &quot;&quot;
+fun norm(s) = lower(s as String) replace /[^a-z0-9]/ with &quot;&quot;
+---
+(vars.game.status.status == 'started') and (norm(message) contains norm(answer))]" doc:name="rightAnswer" doc:id="67156410-660c-4844-8ae2-6f98c04e834f" variableName="rightAnswer" />
+		<choice doc:name="Choice" doc:id="15e13896-a744-450e-ab46-b5c21ff069f9">
+			<when expression="#[vars.rightAnswer]">
+				<ee:transform doc:name="Tag + Update Game" doc:id="d0a1aa84-d2a3-4312-aaad-27c95a6d3ce1">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload update {
+    case d at .data -> {
+        from: d.from default "",
+        text: d.text default "",
+        rightAnswer: true
+    }
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="game"><![CDATA[%dw 2.0
+output application/json
+---
+vars.game update {
+    case players at .status.players ->
+        players map ((p, i) -> 
+            if(p.sid == payload.data.from.sid) (p update {
+                case s at .score -> s + 10
+            })
+            else p
+        )
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<websocket:broadcast doc:name="message" doc:id="37ac3303-0773-4ac8-9b2b-b23a8339d232" config-ref="WebSockets_Config" path="#['/' ++ vars.gameId]" target="res" />
+				<os:store doc:name="Game" doc:id="b3f4cc85-5880-4ac2-ad54-1cb551d3d55d" key="#[vars.gameId]" objectStore="OS_Game">
+					<os:value><![CDATA[#[vars.game]]]></os:value>
+				</os:store>
+				<flow-ref doc:name="nextQuestion" doc:id="87567d2e-978c-4c11-a259-ab2a64f17da2" name="nextQuestion" />
+			</when>
+			<otherwise>
+				<websocket:broadcast doc:name="message" doc:id="8c956db7-5eb9-4849-aa07-1e216fa1d772" config-ref="WebSockets_Config" path="#['/' ++ vars.gameId]" />
+			</otherwise>
+		</choice>
+	</flow>
+	<flow name="sendStatus" doc:id="dd8575b7-ec2b-48d1-85ef-a37dd7eac7d9">
+		<os:retrieve doc:name="game" doc:id="eee46167-5806-48ee-a55b-0262c39147ef" objectStore="OS_Game" key="#[vars.gameId]" />
+		<ee:transform doc:name="Transform Message" doc:id="56a45a68-dfcd-4626-a37f-92e911ff3d0a">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	'type': "status",
+	data: payload.status,
+	sentAt: now()
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<websocket:broadcast doc:name="status" doc:id="c6b661c4-ec3f-4867-886b-699a18663623" config-ref="WebSockets_Config" path="#['/' ++ vars.gameId]">
+		</websocket:broadcast>
+	</flow>
+	<flow name="heartBeat" doc:id="f3955c6a-bfec-44e1-9b0b-bb94b781700b">
+		<scheduler doc:name="Every 2 seconds" doc:id="d4947758-1202-4729-a257-2026f35abc79">
+			<scheduling-strategy>
+				<fixed-frequency frequency="2" timeUnit="SECONDS" />
+			</scheduling-strategy>
+		</scheduler>
+		<os:retrieve-all-keys doc:name="Retrieve all keys" doc:id="31e11c15-d2ee-46c0-9421-04ba4a7129ad" objectStore="OS_Game" target="gameIds" />
+		<foreach doc:name="For Each" doc:id="0c4f5dc5-5635-49de-b235-7b1f227deaa1" collection="#[vars.gameIds]" counterVariableName="game">
+			<set-variable value="#[payload]" doc:name="gameId" doc:id="0b8e7e86-8870-4155-9dd4-e027f6250d82" variableName="gameId" />
+			<flow-ref doc:name="updateTime" doc:id="7fe59180-6e5d-4dd5-947d-15b6592d9c36" name="updateTime" />
+		</foreach>
+	</flow>
+	<flow name="updateTime" doc:id="9ff0d229-b44d-4e4a-b97e-1d04392c9c05" >
+		<os:retrieve doc:name="Game" doc:id="9f8169a7-dd81-4b58-bf4a-90979b5cc180" key="#[vars.gameId]" objectStore="OS_Game" target="game" />
+		<choice doc:name="Choice" doc:id="0e4ab664-cb6d-49dc-ac46-85b30bef4bde" >
+			<when expression="#[(vars.game.status.status == 'started') and (vars.game.status.timeLeft &gt; 0)]">
+				<ee:transform doc:name="time - 1" doc:id="0b024a22-6d61-48a9-aa91-689229bb42e2">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.game update {
+    case t at .status.timeLeft -> (t-1)
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+				<os:store doc:name="Game" doc:id="96a1fcdf-7b6a-477f-b3e1-d300e1127648" key="#[vars.gameId]" objectStore="OS_Game" />
+				<flow-ref doc:name="sendStatus" doc:id="51112c0b-e016-4177-8305-f920d0fa4ef6" name="sendStatus" />
+			</when>
+			<when expression="#[(vars.game.status.status == 'started') and (vars.game.status.timeLeft &lt;= 0)]">
+				<flow-ref doc:name="nextQuestion" doc:id="f388de0f-e60d-42ef-84b3-e76f3d8cbd34" name="nextQuestion" />
+			</when>
+		</choice>
+	</flow>
+	<flow name="nextQuestion" doc:id="9bb0d05c-7351-4215-9c37-37eb957eb808">
+		<os:retrieve doc:name="Game" doc:id="693d04bc-5655-4c1f-aea4-507ece76d353" key="#[vars.gameId]" objectStore="OS_Game" target="game" />
+		<choice doc:name="Choice" doc:id="40e154a2-b52d-4c14-85d4-63a7fd001a8c">
+			<when expression="#[sizeOf(vars.game.quiz.toCome) &gt; 0]">
+				<ee:transform doc:name="nextQuestion" doc:id="e34a085a-1215-4acd-a526-8ec15a4a9447">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var ncurrent = vars.game.quiz.toCome[0]
+var ntoCome = (vars.game.quiz.toCome default []) - ncurrent
+---
+vars.game update {
+    case m at .status.mainMessage -> ncurrent.question
+    case s at .status.timeLeft -> p('settings.time')
+    case c at .quiz.current -> ncurrent
+    case t at .quiz.toCome -> ntoCome
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<when expression="#[sizeOf(vars.game.quiz.toCome) == 0]">
+				<ee:transform doc:name="endGame" doc:id="8ee672ce-7c83-4dc8-85f0-78c39a58d953">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+var winner = ((vars.game.status.players default []) maxBy ((p) -> p.score)).nickname
+---
+vars.game update {
+    case m at .status.mainMessage -> "The winner is " ++ winner ++ '. ' ++ p('settings.textEnded')
+    case s at .status.status -> "ended"
+    case t at .status.timeLeft -> p('settings.time')
+    case c at .quiz.current -> {}
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+		</choice>
+		<os:store doc:name="Game" doc:id="248b2380-71fe-44f5-8608-764d42525a39" key="#[vars.gameId]" objectStore="OS_Game" />
+		<flow-ref doc:name="sendStatus" doc:id="d3c722a9-4616-41ec-8b6d-59a72df69ee7" name="sendStatus" />
+	</flow>
+	<flow name="getQuestions" doc:id="ad495f98-c28c-48a2-be9e-b72ec9336e58">
+		<db:select doc:name="qestions / answers" doc:id="f9a58045-60d3-4473-8f6e-ae586a499d14" config-ref="Database_Config">
+			<db:sql><![CDATA[SELECT question, answer FROM quiz ORDER BY random() LIMIT ${settings.nbOfQuestions}]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="to Spec" doc:id="cdeebcfc-159b-4ab4-a572-226c97478d09">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	current: payload[0],
+	toCome: payload - payload[0]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

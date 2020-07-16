@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="game" format="json">
+      <types:shape format="weave" example="examples/game.json"><![CDATA[%dw 2.0
+
+type game = {|
+  status: {|
+    status: String, 
+    mainMessage: String, 
+    timeLeft: Number {"typeId": "int"}, 
+    players: Array<{|      sid: String,       nickname: String,       score: Number {"typeId": "int"}    |}>
+  |}, 
+  quiz: {|
+    current: {|
+      question: String, 
+      answer: String
+    |}, 
+    toCome: Array<{|      question: String,       answer: String    |}>
+  |}
+|} {"example": "{\\\"status\\\":{\\\"status\\\":\\\"toBeStarted\\\",\\\"mainMessage\\\":\\\"The game hasn't started yet, press START to begin!\\\",\\\"timeLeft\\\":15,\\\"players\\\":[{\\\"sid\\\":\\\"znhcp\\\",\\\"nickname\\\":\\\"Victor\\\",\\\"score\\\":0},{\\\"sid\\\":\\\"tyyty\\\",\\\"nickname\\\":\\\"Cl\u00E9ment\\\",\\\"score\\\":0}]},\\\"quiz\\\":{\\\"current\\\":{\\\"question\\\":\\\"What's the name of MuleSoft only product?\\\",\\\"answer\\\":\\\"Anypoint Platform\\\"},\\\"toCome\\\":[{\\\"question\\\":\\\"What's the first name of Mule mascot?\\\",\\\"answer\\\":\\\"Max\\\"},{\\\"question\\\":\\\"What's the name of MuleSoft approach\\\",\\\"answer\\\":\\\"API-led Connectivity\\\"}]}}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="statusMessage" format="json">
+      <types:shape format="weave" example="examples/statusMessage.json"><![CDATA[%dw 2.0
+
+type statusMessage = {|
+  "type": String, 
+  data: {|
+    status: String, 
+    mainMessage: String, 
+    players: Array<{|      sid: String,       nickname: String,       score: Number {"typeId": "int"}    |}>
+  |}, 
+  sentAt: String
+|} {"example": "{\\\"type\\\":\\\"status\\\",\\\"data\\\":{\\\"status\\\":\\\"toBeStarted\\\",\\\"mainMessage\\\":\\\"The game hasn't started yet, press START to begin!\\\",\\\"players\\\":[{\\\"sid\\\":\\\"znhcp\\\",\\\"nickname\\\":\\\"Victor\\\",\\\"score\\\":0},{\\\"sid\\\":\\\"tyyty\\\",\\\"nickname\\\":\\\"Cl\u00E9ment\\\",\\\"score\\\":0}]},\\\"sentAt\\\":\\\"2020-06-26T09:14:55Z\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="actionMessage" format="json">
+      <types:shape format="weave" example="examples/actionMessage.json"><![CDATA[%dw 2.0
+
+type actionMessage = {|
+  "type": String, 
+  sentAt: String, 
+  data: {|
+    action: String, 
+    sid: String, 
+    nickname: String
+  |}
+|} {"example": "{\\\"type\\\":\\\"action\\\",\\\"sentAt\\\":\\\"2020-06-26T12:33:48Z\\\",\\\"data\\\":{\\\"action\\\":\\\"playerInfo\\\",\\\"sid\\\":\\\"znhcp\\\",\\\"nickname\\\":\\\"Victor\\\"}}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#32332d9b-1413-4d59-98ee-6893fd53d99a">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="game"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#56a45a68-dfcd-4626-a37f-92e911ff3d0a">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="game"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="statusMessage"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#0795167c-51ed-48b3-9327-1ea88be76198">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="actionMessage"/>
+        </types:message>
+        <types:variables>
+          <types:variable name="game" type="game"/>
+        </types:variables>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="game"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#0b024a22-6d61-48a9-aa91-689229bb42e2">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:variables>
+          <types:variable name="game" type="game"/>
+        </types:variables>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="game"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#e34a085a-1215-4acd-a526-8ec15a4a9447">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="game"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#cdeebcfc-159b-4ab4-a572-226c97478d09"/>
+</types:mule>

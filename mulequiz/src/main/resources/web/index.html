@@ -9,11 +9,18 @@
   <body>
     <div id="intro">
       <h1>Welcome to MuleQuiz</h1>
-      <p>MuleQuiz allows you to play with your friends / colleagues and improve your knowledge about MuleSoft. MuleQuiz is entirely based on MuleSoft technologies + a little a bit of HTML/JS/CSS on client side.</p>
+      <p>MuleQuiz allows you to play with your friends / colleagues and improve your knowledge about MuleSoft.</p>
+      <div id="new">
+        <a href="./new" class="btn btn-primary">Create a<b>&nbsp;/new&nbsp;</b>game</a><span> or add the <b>/game-id</b> in the URL to join an existing room.</span>
+      </div>
       <hr>
+      <p>On server side, MuleQuiz is entirely based and deployed on MuleSoft technologies.</p>
       <ul>
-        <li> Path to join an existing game room: /my-room-name (eg. /ipl-uun-gad)</li>
-        <li> Path to create a new game room: <a href="./new">/new</a></li>
+        <li>Mule acts as a <b>WebSocket server</b>, enabling real-time communications.</li>
+        <li>Mule acts as a <b>Web server</b>, delivering client side resources (html/css/js).</li>
+        <li>Mule owns the whole <b>game logic</b>, made easily understandable thanks to Mule flows and message processors.</li>
+        <li><b>AsyncAPI</b> specification is available <a href="./docs/">here</a>, allowing you to create your own MuleQuiz client.</li>
+        <li>The entire <b>source code</b> is available <a href="https://github.com/victorbahl/mulequiz">here</a>. Feel free to share / improve.</li>
       </ul>
     </div>
   </body>

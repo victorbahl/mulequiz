@@ -1,7 +1,7 @@
 :root {
     --global-font-size: 13px;
     --global-line-height: 1.6em;
-    --global-space: 6px;
+    --global-space: 4px;
     --background-color: #222225;
     --page-width: 60em;
     --font-color: #e8e9ed;
@@ -49,10 +49,6 @@
 
   #footer {
     grid-row: 4;
-  }
-
-  #new {
-    padding-bottom: 32px;
   }
 
   .btn-start {

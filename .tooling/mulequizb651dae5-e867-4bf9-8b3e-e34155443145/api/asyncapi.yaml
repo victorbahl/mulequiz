@@ -3,14 +3,14 @@ info:
   title: MuleQuiz Async API
   version: '1.0.0'
   description: |
-    MuleQuiz allows you to play with your friends / colleagues and improve your knowledge about MuleSoft.
-    This AsyncAPI specification allows you to develop your own client.
-    
-    ### How to test it:
-    * Use a WebSocket client (such as [Simple WebSocket Client](https://chrome.google.com/webstore/detail/simple-websocket-client/pfdhoblngboilpfeibdedpjgfnlcodoo) or even [Websocket.org](https://www.websocket.org/echo.html))
-    * Connect to the WebSocket of the demo room: *wss://api.victorbahl.com:443/mquiz/demo*
-    * Use the simple MuleQuiz web client to interact: [https://api.victorbahl.com/mquiz/demo](https://api.victorbahl.com/mquiz/demo)
-    * Send messages, start the game, play and see the raw messages (JSON) in your WebSocket client 🎉
+    The MuleQuiz Async API allows you to play with your friends / colleagues and improve your knowledge about MuleSoft.
+
+    ### Check out its awesome features:
+
+    * Real-time chat while playing 💬
+    * Async specifications allowing you to easily understand it and develop your own client 📃
+    * A simple HTML/JS client to test it: [link](https://api.victorbahl.com/mulequiz) 🌐
+    * Documentation of the WebSocket implementation with MuleSoft available here: [link](https://github.com) 🎉
 
   license:
     name: Apache 2.0
@@ -24,7 +24,7 @@ servers:
 defaultContentType: application/json
 
 channels:
-  mquiz/{gameId}:
+  mulequiz/{gameId}:
     description: The topic on which game events may be produced and consumed.
     parameters:
       gameId:
