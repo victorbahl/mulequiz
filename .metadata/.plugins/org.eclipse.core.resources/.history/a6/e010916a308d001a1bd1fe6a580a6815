@@ -1,0 +1,14 @@
+https:
+  port: '8082'
+  private:
+    port: '8092'
+
+http:
+  port: '8081'
+  private:
+    port: '8091'
+
+ws:
+  url: 'wss://vbdlb.lb.anypointdns.net:443/stupidpen/'
+  # url: 'ws://vbdlb.lb.anypointdns.net:80/stupidpen/'
+  # url: 'wss://api.victorbahl.com:443/stupidpen/'

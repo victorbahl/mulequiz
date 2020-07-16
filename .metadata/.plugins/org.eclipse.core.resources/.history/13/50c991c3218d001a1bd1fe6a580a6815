@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <apikit:config name="stupidpen-config" api="resource::14190683-4516-4ed4-bfc7-69e8ad890cdb:stupidpen:1.0.1:raml:zip:stupidpen.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" disableValidations="true"/>
+    <flow name="stupidpen-main">
+        <http:listener config-ref="HTTPS_Listener_config" path="/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="stupidpen-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="get:\g\(gameId):stupidpen-config">
+		<set-variable value="#[attributes.uriParams.'gameId']" doc:name="gameId" doc:id="17ec97fe-1563-4cfe-8ef8-ae2967b3a9f9" variableName="gameId" />
+		<ee:transform doc:name="Finalize HTML" doc:id="0cf54243-c546-4d33-9624-cc6e67530441" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml writeDeclaration = false
+---
+html:{    
+  head:{
+    title: 'StupidPen ! - ' ++ (vars.gameId default ''),
+    script @('src':'https://cdn.jsdelivr.net/npm/vue/dist/vue.js'):' '
+  },
+  body:{
+    div @('id':'app'):{
+      h2: 'Messages in ' ++ (vars.gameId default ''),
+      ul:{
+        li @('v-for':'message in messages'):'{{message}}'
+      },
+      form @('@submit.prevent':'send'):{
+        'input' @('type':'text', 'v-model':'newm'):'',
+        'input' @('type':'submit', 'value':'Post'):'',
+      }
+    },
+    script: "
+      var ws = new WebSocket('" ++ p('ws.url') ++ "/g/'+window.location.pathname.split('/').pop());
+      var app = new Vue({
+        el: '#app',
+        data: {
+          messages: [],
+          newm: ''
+        },
+        created(){
+          ws.onmessage = ({ data }) => {
+            this.messages.push(data);
+          };
+        
+        },
+        //Vue Methods hook
+        methods: {
+          send(){
+            ws.send(this.newm);
+            this.newm = null;
+          }
+        }
+      })
+    "
+  }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value="#[payload]" doc:name="Change MIME Type" doc:id="a0dbe5ed-f299-495f-b19b-72718edab766" mimeType="text/html" />
+		<logger level="INFO" message="get:\g\(gameId):stupidpen-config" />
+    </flow>
+    <flow name="get:\:stupidpen-config">
+        <ee:transform doc:name="Finalize HTML" doc:id="a301a86c-a3f2-4a30-9cc7-922a55191b1e">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/xml writeDeclaration = false
+---
+html:{    
+  head:{
+    title: 'StupidPen ! - Homepage',
+  },
+  body:{
+    div @('id':'app'):{
+      h2: 'Go to a game room'
+    }
+  }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value="#[payload]" doc:name="Change MIME Type" doc:id="fa8ad5bf-c709-4a8a-8f7c-24b3b39ff32b" mimeType="text/html" />
+		<logger level="INFO" message="get:\:stupidpen-config" />
+    </flow>
+</mule>

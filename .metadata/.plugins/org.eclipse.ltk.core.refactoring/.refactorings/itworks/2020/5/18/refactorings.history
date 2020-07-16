@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;config.properties&apos; to &apos;trapide/src/main/resources&apos;&#x0A;- Original project: &apos;itworks&apos;&#x0A;- Destination element: &apos;trapide/src/main/resources&apos;&#x0A;- Original element: &apos;config.properties&apos;" description="Copy file" destination="=trapide/src\/main\/resources" element1="src/main/resources/config.properties" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1588417691371" units="0" version="1.0"/>
+</session>

@@ -1,0 +1,2 @@
+ ag ./mulequiz/src/main/resources/api/asyncapi.yaml @asyncapi/html-template -o ./mulequiz/src/main/resources/web/docs --force-write
+<base href="./">

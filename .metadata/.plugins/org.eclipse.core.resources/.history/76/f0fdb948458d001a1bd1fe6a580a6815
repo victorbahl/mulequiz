@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="291d0971-cede-49bb-96c7-b18a44290f4c" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="ee8937f1-47a6-4381-9154-0abe1bab32ff" file="config.properties" />
+	<flow name="www-testFlow" doc:id="aad75078-c42d-4517-b183-ef37e1860f67" >
+		<http:listener doc:name="Listener" doc:id="f47c5aa1-a9b5-451d-95de-927ec265e363" config-ref="HTTP_Listener_config" path="/*"/>
+		<http:load-static-resource doc:name="Load static resource" doc:id="fdac0637-f58d-447b-b4aa-f010e7284768" resourceBasePath="web/"/>
+	</flow>
+</mule>

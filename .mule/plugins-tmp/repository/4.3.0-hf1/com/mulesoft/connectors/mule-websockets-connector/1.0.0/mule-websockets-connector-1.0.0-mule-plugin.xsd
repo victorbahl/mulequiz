@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:mule="http://www.mulesoft.org/schema/mule/core" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mulesoft.org/schema/mule/websocket" attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace"></xs:import>
+  <xs:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans.xsd"></xs:import>
+  <xs:import namespace="http://www.mulesoft.org/schema/mule/core" schemaLocation="http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></xs:import>
+  <xs:import namespace="http://www.mulesoft.org/schema/mule/http" schemaLocation="http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd"></xs:import>
+  <xs:import namespace="http://www.mulesoft.org/schema/mule/tls" schemaLocation="http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd"></xs:import>
+  <xs:complexType name="com.mulesoft.connectors.ws.api.client.proxy.HttpProxyConfig">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractExtensionType"></xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" type="websocket:com.mulesoft.connectors.ws.api.client.proxy.HttpProxyConfig" substitutionGroup="mule:abstract-shared-extension" abstract="true" name="global-abstract-http-proxy-config"></xs:element>
+  <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" type="websocket:com.mulesoft.connectors.ws.api.client.proxy.HttpProxyConfig" abstract="true" name="abstract-http-proxy-config"></xs:element>
+  <xs:complexType name="com.mulesoft.connectors.ws.api.client.proxy.DefaultProxyConfig">
+    <xs:complexContent>
+      <xs:extension xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" base="websocket:com.mulesoft.connectors.ws.api.client.proxy.HttpProxyConfig">
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionString" use="required" name="host"></xs:attribute>
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionInt" use="required" name="port"></xs:attribute>
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionString" use="optional" name="username"></xs:attribute>
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionString" use="optional" name="password"></xs:attribute>
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionString" use="optional" name="nonProxyHosts"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" substitutionGroup="websocket:global-abstract-http-proxy-config" abstract="true" name="abstract-proxy"></xs:element>
+  <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" substitutionGroup="websocket:abstract-proxy" name="proxy">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="websocket:com.mulesoft.connectors.ws.api.client.proxy.DefaultProxyConfig">
+          <xs:attribute type="xs:string" use="optional" name="name"></xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="com.mulesoft.connectors.ws.api.client.proxy.DefaultNtlmProxyConfig">
+    <xs:complexContent>
+      <xs:extension xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" base="websocket:com.mulesoft.connectors.ws.api.client.proxy.HttpProxyConfig">
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionString" use="required" name="ntlmDomain"></xs:attribute>
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionString" use="required" name="host"></xs:attribute>
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionInt" use="required" name="port"></xs:attribute>
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionString" use="optional" name="username"></xs:attribute>
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionString" use="optional" name="password"></xs:attribute>
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionString" use="optional" name="nonProxyHosts"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" substitutionGroup="websocket:global-abstract-http-proxy-config" abstract="true" name="abstract-ntlm-proxy"></xs:element>
+  <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" substitutionGroup="websocket:abstract-ntlm-proxy" name="ntlm-proxy">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="websocket:com.mulesoft.connectors.ws.api.client.proxy.DefaultNtlmProxyConfig">
+          <xs:attribute type="xs:string" use="optional" name="name"></xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstract-shared-extension" name="config">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractExtensionType">
+          <xs:annotation>
+            <xs:documentation>Default configuration</xs:documentation>
+          </xs:annotation>
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstractConnectionProvider"></xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:string" use="required" name="name">
+            <xs:annotation>
+              <xs:documentation>The identifier of this element used to reference it in other components</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstractConnectionProvider" name="connection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractConnectionProviderType">
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:reconnection"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="server-settings">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" base="websocket:com.mulesoft.connectors.ws.api.server.WebSocketServerSettings"></xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="client-settings">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" base="websocket:com.mulesoft.connectors.ws.api.client.WebSocketClientSettings"></xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="com.mulesoft.connectors.ws.api.server.WebSocketServerSettings">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractExtensionType">
+        <xs:attribute type="xs:string" use="optional" default="/" name="listenerBasePath"></xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="listenerConfig"></xs:attribute>
+        <xs:attribute type="mule:substitutableInt" use="optional" default="15" name="idleSocketTimeout"></xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/websocket" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="MINUTES" name="idleSocketTimeoutUnit"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="com.mulesoft.connectors.ws.api.client.RequestHeader">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractExtensionType">
+        <xs:attribute type="mule:expressionString" use="required" name="key"></xs:attribute>
+        <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" type="websocket:com.mulesoft.connectors.ws.api.client.RequestHeader" abstract="true" name="abstract-header"></xs:element>
+  <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" substitutionGroup="websocket:abstract-header" name="header">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="websocket:com.mulesoft.connectors.ws.api.client.RequestHeader"></xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="com.mulesoft.connectors.ws.api.client.QueryParam">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractExtensionType">
+        <xs:attribute type="mule:expressionString" use="required" name="key"></xs:attribute>
+        <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" type="websocket:com.mulesoft.connectors.ws.api.client.QueryParam" abstract="true" name="abstract-query-param"></xs:element>
+  <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" substitutionGroup="websocket:abstract-query-param" name="query-param">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="websocket:com.mulesoft.connectors.ws.api.client.QueryParam"></xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="com.mulesoft.connectors.ws.api.client.WebSocketClientSettings">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractExtensionType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element xmlns:tls="http://www.mulesoft.org/schema/mule/tls" minOccurs="0" maxOccurs="1" ref="tls:context"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="default-headers">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" minOccurs="0" maxOccurs="unbounded" ref="websocket:abstract-header"></xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="default-query-params">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" minOccurs="0" maxOccurs="unbounded" ref="websocket:abstract-query-param"></xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="proxy-config">
+            <xs:complexType>
+              <xs:choice minOccurs="1" maxOccurs="1">
+                <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" minOccurs="1" maxOccurs="1" ref="websocket:abstract-http-proxy-config"></xs:element>
+                <xs:element xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" minOccurs="1" maxOccurs="1" ref="websocket:global-abstract-http-proxy-config"></xs:element>
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="authentication">
+            <xs:complexType>
+              <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element xmlns:http="http://www.mulesoft.org/schema/mule/http" minOccurs="1" maxOccurs="1" ref="http:abstract-http-request-authentication"></xs:element>
+                <xs:element xmlns:http="http://www.mulesoft.org/schema/mule/http" minOccurs="1" maxOccurs="1" ref="http:global-abstract-http-request-authentication"></xs:element>
+              </xs:choice>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="optional" name="host"></xs:attribute>
+        <xs:attribute type="mule:expressionInt" use="optional" name="port"></xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" default="/" name="basePath"></xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/websocket" type="org.mule.runtime.http.api.ws.WebSocketProtocolEnumType" use="optional" default="WS" name="protocol"></xs:attribute>
+        <xs:attribute type="xs:string" use="optional" name="tlsContext"></xs:attribute>
+        <xs:attribute type="mule:expressionList" use="optional" name="defaultHeaders"></xs:attribute>
+        <xs:attribute type="mule:expressionList" use="optional" name="defaultQueryParams"></xs:attribute>
+        <xs:attribute type="mule:substitutableInt" use="optional" name="connectionIdleTimeout"></xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/websocket" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="MINUTES" name="connectionIdleTimeoutUnit"></xs:attribute>
+        <xs:attribute type="mule:expressionBoolean" use="optional" default="true" name="followRedirects"></xs:attribute>
+        <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="preserveHeadersCase"></xs:attribute>
+        <xs:attribute type="mule:substitutableInt" use="optional" default="-1" name="maxConnections"></xs:attribute>
+        <xs:attribute type="xs:string" use="optional" name="proxyConfig"></xs:attribute>
+        <xs:attribute type="xs:string" use="optional" name="authentication"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="Inbound-listenerType" substitutionGroup="mule:abstract-message-source" name="inbound-listener">
+    <xs:annotation>
+      <xs:documentation>Exposes an endpoint through which external systems can connect through a WebSocket. This source will trigger the owning flow each time one of those WebSockets send information to this server. Additionally, any &amp;lt;websocket:on-inbound-connection&amp;gt; component with a matching path will also be triggered when that socket connection is established.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="Inbound-listenerType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractMessageSourceType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-redelivery-policy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-byte-streaming-strategy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="default-groups">
+            <xs:annotation>
+              <xs:documentation>The groups to which newly created sockets should be initially subscribed to</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="default-group">
+                  <xs:complexType>
+                    <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute type="xs:string" use="required" name="path">
+          <xs:annotation>
+            <xs:documentation>Relative path from the path set in the configuration</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:substitutableName" use="optional" name="defaultGroups">
+          <xs:annotation>
+            <xs:documentation>The groups to which newly created sockets should be initially subscribed to</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" name="outputMimeType">
+          <xs:annotation>
+            <xs:documentation>The mime type of the payload that this operation outputs.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" name="outputEncoding">
+          <xs:annotation>
+            <xs:documentation>The encoding of the payload that this operation outputs.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:substitutableBoolean" use="optional" name="primaryNodeOnly">
+          <xs:annotation>
+            <xs:documentation>Whether this source should only be executed on the primary node when runnning in Cluster</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="On-inbound-connectionType" substitutionGroup="mule:abstract-message-source" name="on-inbound-connection">
+    <xs:annotation>
+      <xs:documentation>Triggers when an inbound WebSocket connection is established</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="On-inbound-connectionType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractMessageSourceType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-redelivery-policy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+        </xs:sequence>
+        <xs:attribute type="xs:string" use="required" name="path">
+          <xs:annotation>
+            <xs:documentation>Relative path from the path set in the configuration</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:substitutableBoolean" use="optional" name="primaryNodeOnly">
+          <xs:annotation>
+            <xs:documentation>Whether this source should only be executed on the primary node when runnning in Cluster</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="On-socket-closedType" substitutionGroup="mule:abstract-message-source" name="on-socket-closed">
+    <xs:annotation>
+      <xs:documentation>Triggers when a WebSocket is closed.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="On-socket-closedType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractMessageSourceType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-redelivery-policy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+        </xs:sequence>
+        <xs:attribute type="xs:string" use="required" name="path">
+          <xs:annotation>
+            <xs:documentation>Relative path from the path set in the configuration</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:substitutableBoolean" use="optional" name="primaryNodeOnly">
+          <xs:annotation>
+            <xs:documentation>Whether this source should only be executed on the primary node when runnning in Cluster</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="Outbound-listenerType" substitutionGroup="mule:abstract-message-source" name="outbound-listener">
+    <xs:annotation>
+      <xs:documentation>Triggers when an outbound socket receives a message</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="Outbound-listenerType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractMessageSourceType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-redelivery-policy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-byte-streaming-strategy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+        </xs:sequence>
+        <xs:attribute type="xs:string" use="required" name="path">
+          <xs:annotation>
+            <xs:documentation>Relative path from the path set in the configuration</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" name="outputMimeType">
+          <xs:annotation>
+            <xs:documentation>The mime type of the payload that this operation outputs.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" name="outputEncoding">
+          <xs:annotation>
+            <xs:documentation>The encoding of the payload that this operation outputs.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:substitutableBoolean" use="optional" name="primaryNodeOnly">
+          <xs:annotation>
+            <xs:documentation>Whether this source should only be executed on the primary node when runnning in Cluster</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="BroadcastType" substitutionGroup="mule:abstract-operator" name="broadcast">
+    <xs:annotation>
+      <xs:documentation>Sends the given content to all the active WebSockets that match the path, socketType and groups criteria. In the case of the path, the base path configured in the config will not be considered as you may be targeting both inbound and outbound sockets. The message will be send to all the matching sockets, even though it's possible that delivery to some of them fail. The operation will return a list of BroadcastFailure containing details of each of the failures. If none fail, an empty list is returned</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="BroadcastType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+          <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="content">
+            <xs:annotation>
+              <xs:documentation>the content to be sent</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="groups">
+            <xs:annotation>
+              <xs:documentation>matches sockets that belong to any of these groups</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="group">
+                  <xs:complexType>
+                    <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="required" name="path">
+          <xs:annotation>
+            <xs:documentation>the path of the sockets to be matched</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/websocket" type="com.mulesoft.connectors.ws.api.BroadcastSocketTypeEnumType" use="optional" default="ALL" name="socketType">
+          <xs:annotation>
+            <xs:documentation>the type of sockets to be matched</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionList" use="optional" name="groups">
+          <xs:annotation>
+            <xs:documentation>matches sockets that belong to any of these groups</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="optional" name="target">
+          <xs:annotation>
+            <xs:documentation>The name of a variable on which the operation's output will be placed</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" default="#[payload]" name="targetValue">
+          <xs:annotation>
+            <xs:documentation>An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="BulkCloseSocketsType" substitutionGroup="mule:abstract-operator" name="bulk-close-sockets"></xs:element>
+  <xs:complexType name="BulkCloseSocketsType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="groups">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="group">
+                  <xs:complexType>
+                    <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/websocket" type="com.mulesoft.connectors.ws.api.BroadcastSocketTypeEnumType" use="optional" default="ALL" name="socketType"></xs:attribute>
+        <xs:attribute type="mule:expressionList" use="optional" name="groups"></xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/websocket" type="org.mule.runtime.http.api.ws.WebSocketCloseCodeEnumType" use="optional" default="NORMAL_CLOSURE" name="closeCode"></xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" name="reason"></xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="CloseSocketType" substitutionGroup="mule:abstract-operator" name="close-socket">
+    <xs:annotation>
+      <xs:documentation>Closes the socket</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="CloseSocketType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="required" name="socketId">
+          <xs:annotation>
+            <xs:documentation>the id of the socket to be closed</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/websocket" type="org.mule.runtime.http.api.ws.WebSocketCloseCodeEnumType" use="optional" default="NORMAL_CLOSURE" name="closeCode">
+          <xs:annotation>
+            <xs:documentation>the close code</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" name="reason">
+          <xs:annotation>
+            <xs:documentation>the closing reason phrase</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="OpenOutboundSocketType" substitutionGroup="mule:abstract-operator" name="open-outbound-socket">
+    <xs:annotation>
+      <xs:documentation>Opens a new outbound socket</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="OpenOutboundSocketType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="default-groups">
+            <xs:annotation>
+              <xs:documentation>the groups to which the socket should be initially subscribed</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="default-group">
+                  <xs:complexType>
+                    <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="headers">
+            <xs:annotation>
+              <xs:documentation>HTTP headers the message should include.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="uri-params">
+            <xs:annotation>
+              <xs:documentation>URI parameters that should be used to create the request.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="query-params">
+            <xs:annotation>
+              <xs:documentation>Query parameters the request should include.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="optional" name="socketId"></xs:attribute>
+        <xs:attribute type="mule:expressionList" use="optional" name="defaultGroups">
+          <xs:annotation>
+            <xs:documentation>the groups to which the socket should be initially subscribed</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" name="path">
+          <xs:annotation>
+            <xs:documentation>Path where the request will be sent.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" name="url">
+          <xs:annotation>
+            <xs:documentation>URL where to send the request.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="optional" name="target">
+          <xs:annotation>
+            <xs:documentation>The name of a variable on which the operation's output will be placed</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" default="#[payload]" name="targetValue">
+          <xs:annotation>
+            <xs:documentation>An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="SendType" substitutionGroup="mule:abstract-operator" name="send">
+    <xs:annotation>
+      <xs:documentation>Sends the given content through the given socket</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="SendType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+          <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="content">
+            <xs:annotation>
+              <xs:documentation>the content to be sent</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="required" name="socketId">
+          <xs:annotation>
+            <xs:documentation>the id of the socket through which data is to be sent</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="SubscribeGroupsType" substitutionGroup="mule:abstract-operator" name="subscribe-groups">
+    <xs:annotation>
+      <xs:documentation>Subscribes the socket of the given socketId to the given groups. This operation can be used on the same socket as many times as necessary, each use being additive over previous ones. Repeated groups will be ignored. Works for both types INBOUND and OUTBOUND sockets.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="SubscribeGroupsType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="groups">
+            <xs:annotation>
+              <xs:documentation>the groups that the socket will be subscribed to</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="group">
+                  <xs:complexType>
+                    <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="required" name="socketId">
+          <xs:annotation>
+            <xs:documentation>the id of the socket to be subscribed</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionList" use="optional" name="groups">
+          <xs:annotation>
+            <xs:documentation>the groups that the socket will be subscribed to</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/websocket" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="UnsubscribeGroupsType" substitutionGroup="mule:abstract-operator" name="unsubscribe-groups">
+    <xs:annotation>
+      <xs:documentation>Unsubscribes the socket of the given socketId from the given groups. This operation can be used on the same socket as many times as necessary, each use being additive over previous ones. Works for both types INBOUND and OUTBOUND sockets.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="UnsubscribeGroupsType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="groups">
+            <xs:annotation>
+              <xs:documentation>the groups that the socket will be unsubscribed from</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="group">
+                  <xs:complexType>
+                    <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+                  </xs:complexType>
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="required" name="socketId">
+          <xs:annotation>
+            <xs:documentation>the id of the socket to be subscribed</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionList" use="optional" name="groups">
+          <xs:annotation>
+            <xs:documentation>the groups that the socket will be unsubscribed from</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstractConnectionProvider" name="connection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractConnectionProviderType">
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:reconnection"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="server-settings">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" base="websocket:com.mulesoft.connectors.ws.api.server.WebSocketServerSettings"></xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="client-settings">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension xmlns:websocket="http://www.mulesoft.org/schema/mule/websocket" base="websocket:com.mulesoft.connectors.ws.api.client.WebSocketClientSettings"></xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="java.util.concurrent.TimeUnitEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NANOSECONDS"></xs:enumeration>
+          <xs:enumeration value="MICROSECONDS"></xs:enumeration>
+          <xs:enumeration value="MILLISECONDS"></xs:enumeration>
+          <xs:enumeration value="SECONDS"></xs:enumeration>
+          <xs:enumeration value="MINUTES"></xs:enumeration>
+          <xs:enumeration value="HOURS"></xs:enumeration>
+          <xs:enumeration value="DAYS"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="org.mule.runtime.http.api.ws.WebSocketProtocolEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="WS"></xs:enumeration>
+          <xs:enumeration value="WSS"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="com.mulesoft.connectors.ws.api.BroadcastSocketTypeEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="INBOUND"></xs:enumeration>
+          <xs:enumeration value="OUTBOUND"></xs:enumeration>
+          <xs:enumeration value="ALL"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="org.mule.runtime.http.api.ws.WebSocketCloseCodeEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NORMAL_CLOSURE"></xs:enumeration>
+          <xs:enumeration value="ENDPOINT_GOING_DOWN"></xs:enumeration>
+          <xs:enumeration value="PROTOCOL_ERROR"></xs:enumeration>
+          <xs:enumeration value="INVALID_DATA"></xs:enumeration>
+          <xs:enumeration value="MESSAGE_TOO_LARGE"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+</xs:schema>

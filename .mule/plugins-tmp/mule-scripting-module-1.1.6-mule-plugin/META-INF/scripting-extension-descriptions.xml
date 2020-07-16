@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension-documentation>
+    <configs>
+        <config name="config">
+            <description><![CDATA[Default configuration]]></description>
+            <parameters/>
+        </config>
+    </configs>
+    <connections/>
+    <extension name="Scripting">
+        <description><![CDATA[]]></description>
+        <parameters/>
+    </extension>
+    <operations>
+        <operation name="execute">
+            <description><![CDATA[Run a script with provided code, according to the engine and passing parameters.]]></description>
+            <parameters>
+                <parameter name="code">
+                    <description><![CDATA[the script source code to be executed]]></description>
+                </parameter>
+                <parameter name="engine">
+                    <description><![CDATA[name of the scripting engine for running this script]]></description>
+                </parameter>
+                <parameter name="parameters">
+                    <description><![CDATA[variables provided to the script as bindings]]></description>
+                </parameter>
+                <parameter name="target">
+                    <description><![CDATA[The name of a variable on which the operation's output will be placed]]></description>
+                </parameter>
+                <parameter name="targetValue">
+                    <description><![CDATA[An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+    </operations>
+    <sources/>
+    <types/>
+</extension-documentation>

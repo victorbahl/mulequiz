@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.mule.tooling.runtime.muleServerLaunchType">
+<stringAttribute key="clear_data" value="NEVER"/>
+<booleanAttribute key="consoleEnabled" value="true"/>
+<stringAttribute key="launch_mule_server_version" value="org.mule.tooling.server.4.3.0.ee"/>
+<stringAttribute key="maven.command.line" value=""/>
+<booleanAttribute key="maven.snapshot.updates" value="false"/>
+<stringAttribute key="mule-agent-port" value="51382"/>
+<listAttribute key="mule-project-names">
+<listEntry value="stupidpen-www"/>
+<listEntry value="stupidpen-ws"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/stupidpen-oneproject"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="stupidpen-www"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-M-XX:-UseBiasedLocking -M-Dfile.encoding=UTF-8 -M-XX:+UseG1GC -M-XX:+UseStringDeduplication"/>
+<intAttribute key="remote-debug-max-stream-size" value="2"/>
+<intAttribute key="remote-debug-port" value="6666"/>
+<booleanAttribute key="remote-debug-suspend" value="false"/>
+</launchConfiguration>

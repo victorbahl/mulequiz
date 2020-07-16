@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <apikit:config name="mulequiz-api-config" api="resource::14190683-4516-4ed4-bfc7-69e8ad890cdb:mulequiz-api:1.0.2:raml:zip:mulequiz-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="mulequiz-api-main">
+        <http:listener config-ref="HTTPS_Listener_config" path="/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="mulequiz-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="get:\:mulequiz-api-config">
+        <parse-template doc:name="index.html" doc:id="17dfae26-2e07-421a-81ad-c1d796ff15e1" location="${mule.home}/apps/${app.name}/web/index.html" />
+    </flow>
+    <flow name="get:\s\(id):mulequiz-api-config">
+        <http:load-static-resource doc:name="Load static resource" doc:id="9dc34151-beaa-4aef-ab8b-3d22670c1843" resourceBasePath="${mule.home}/apps/${app.name}/web/" defaultFile="main.css" />
+    </flow>
+    <flow name="get:\(gameId):mulequiz-api-config">
+        <choice doc:name="Choice" doc:id="5652b9ed-18c7-4b0b-a42d-08eac82053ed">
+            <when expression="#[attributes.uriParams.gameId == &quot;new&quot;]">
+                <flow-ref doc:name="generateNewId" doc:id="a4811dbd-62af-4f98-8544-45cefc83f915" name="generateNewId" target="gameId" />
+                <ee:transform doc:name="redirectHeaders" doc:id="a9c20030-006c-42d0-a1d0-40b9864a7857">
+                    <ee:message>
+                        <ee:set-payload><![CDATA["303 Redirection See Other"]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus"><![CDATA[303]]></ee:set-variable>
+                        <ee:set-variable variableName="outboundHeaders"><![CDATA[%dw 2.0
+output application/java
+---
+{
+	Location: './' ++ vars.gameId
+}]]></ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </when>
+            <otherwise>
+                <parse-template doc:name="game.html" doc:id="0ec29886-0a11-4179-b5af-ca4769fa9e83" location="${mule.home}/apps/${app.name}/web/game.html" />
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="get:\docs\(id):mulequiz-api-config">
+        <http:load-static-resource doc:name="Load static resource" doc:id="83212069-0f34-4116-ab37-de42c83520f2" resourceBasePath="${mule.home}/apps/${app.name}/web/" />
+    </flow>
+    <flow name="get:\docs\:mulequiz-api-config">
+        <logger level="INFO" message="get:\docs\:mulequiz-api-config" />
+    </flow>
+    <flow name="get:\docs\css\(id):mulequiz-api-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="id">attributes.uriParams.'id'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <logger level="INFO" message="get:\docs\css\(id):mulequiz-api-config" />
+    </flow>
+    <flow name="get:\docs\js\(id):mulequiz-api-config">
+        <ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="id">attributes.uriParams.'id'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <logger level="INFO" message="get:\docs\js\(id):mulequiz-api-config" />
+    </flow>
+</mule>

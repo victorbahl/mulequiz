@@ -1,0 +1,34 @@
+{
+  "extensionModelLoaderDescriptor": {
+    "id": "java",
+    "attributes": {
+      "type": "com.mulesoft.connectors.ws.internal.WebSocketsConnector",
+      "version": "1.0.0"
+    }
+  },
+  "license": {
+    "allowsEvaluation": true
+  },
+  "name": "WebSockets",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "privilegedExportedPackages": [],
+      "privilegedArtifactIds": [],
+      "exportedPackages": [
+        "com.mulesoft.connectors.ws.api.client",
+        "com.mulesoft.connectors.ws.api",
+        "com.mulesoft.connectors.ws.api.client.proxy",
+        "org.mule.extension.http.api.request.authentication",
+        "com.mulesoft.connectors.ws.api.server"
+      ],
+      "exportedResources": []
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  },
+  "minMuleVersion": "4.2.2"
+}

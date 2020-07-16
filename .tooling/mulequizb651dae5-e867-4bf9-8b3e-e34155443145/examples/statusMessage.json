@@ -1,0 +1,20 @@
+{
+    "type": "status",
+    "data": {
+      "status": "toBeStarted",
+      "mainMessage": "The game hasn't started yet, press START to begin!",
+      "players": [
+        {
+          "sid": "znhcp",
+          "nickname": "Victor",
+          "score": 0
+        },
+        {
+          "sid": "tyyty",
+          "nickname": "Clément",
+          "score": 0
+        }
+      ]
+    },
+    "sentAt": "2020-06-26T09:14:55Z"
+}

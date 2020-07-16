@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension-documentation>
+    <configs>
+        <config name="config">
+            <description><![CDATA[Default configuration]]></description>
+            <parameters>
+                <parameter name="name">
+                    <description><![CDATA[The identifier of this element used to reference it in other components]]></description>
+                </parameter>
+            </parameters>
+        </config>
+    </configs>
+    <connections>
+        <connection name="connection">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="serverSettings">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="clientSettings">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="reconnection">
+                    <description><![CDATA[When the application is deployed, a connectivity test is performed on all connectors. If set to true, deployment will fail if the test doesn't pass after exhausting the associated reconnection strategy]]></description>
+                </parameter>
+            </parameters>
+        </connection>
+        <connection name="connection">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="serverSettings">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="clientSettings">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="reconnection">
+                    <description><![CDATA[When the application is deployed, a connectivity test is performed on all connectors. If set to true, deployment will fail if the test doesn't pass after exhausting the associated reconnection strategy]]></description>
+                </parameter>
+            </parameters>
+        </connection>
+    </connections>
+    <extension name="WebSockets">
+        <description><![CDATA[Allows communication through the WebSockets protocol. This connector allows for both, external systems to open connections to this server (INBOUND sockets) or for it to connect to external systems (OUTBOUND socket). In both cases, full duplex traffic is supported]]></description>
+        <parameters/>
+    </extension>
+    <operations>
+        <operation name="broadcast">
+            <description><![CDATA[Sends the given content to all the active WebSockets that match the path, socketType and groups criteria. In the case of the path, the base path configured in the config will not be considered as you may be targeting both inbound and outbound sockets. The message will be send to all the matching sockets, even though it's possible that delivery to some of them fail. The operation will return a list of BroadcastFailure containing details of each of the failures. If none fail, an empty list is returned]]></description>
+            <parameters>
+                <parameter name="content">
+                    <description><![CDATA[the content to be sent]]></description>
+                </parameter>
+                <parameter name="path">
+                    <description><![CDATA[the path of the sockets to be matched]]></description>
+                </parameter>
+                <parameter name="socketType">
+                    <description><![CDATA[the type of sockets to be matched]]></description>
+                </parameter>
+                <parameter name="groups">
+                    <description><![CDATA[matches sockets that belong to any of these groups]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="target">
+                    <description><![CDATA[The name of a variable on which the operation's output will be placed]]></description>
+                </parameter>
+                <parameter name="targetValue">
+                    <description><![CDATA[An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+        <operation name="bulkCloseSockets">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="socketType">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="groups">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="closeCode">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="reason">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="target">
+                    <description><![CDATA[The name of a variable on which the operation's output will be placed]]></description>
+                </parameter>
+                <parameter name="targetValue">
+                    <description><![CDATA[An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+        <operation name="closeSocket">
+            <description><![CDATA[Closes the socket]]></description>
+            <parameters>
+                <parameter name="socketId">
+                    <description><![CDATA[the id of the socket to be closed]]></description>
+                </parameter>
+                <parameter name="closeCode">
+                    <description><![CDATA[the close code]]></description>
+                </parameter>
+                <parameter name="reason">
+                    <description><![CDATA[the closing reason phrase]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="target">
+                    <description><![CDATA[The name of a variable on which the operation's output will be placed]]></description>
+                </parameter>
+                <parameter name="targetValue">
+                    <description><![CDATA[An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+        <operation name="openOutboundSocket">
+            <description><![CDATA[Opens a new outbound socket]]></description>
+            <parameters>
+                <parameter name="socketId">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="defaultGroups">
+                    <description><![CDATA[the groups to which the socket should be initially subscribed]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="path">
+                    <description><![CDATA[Path where the request will be sent.]]></description>
+                </parameter>
+                <parameter name="url">
+                    <description><![CDATA[URL where to send the request.]]></description>
+                </parameter>
+                <parameter name="headers">
+                    <description><![CDATA[HTTP headers the message should include.]]></description>
+                </parameter>
+                <parameter name="uriParams">
+                    <description><![CDATA[URI parameters that should be used to create the request.]]></description>
+                </parameter>
+                <parameter name="queryParams">
+                    <description><![CDATA[Query parameters the request should include.]]></description>
+                </parameter>
+                <parameter name="target">
+                    <description><![CDATA[The name of a variable on which the operation's output will be placed]]></description>
+                </parameter>
+                <parameter name="targetValue">
+                    <description><![CDATA[An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+        <operation name="send">
+            <description><![CDATA[Sends the given content through the given socket]]></description>
+            <parameters>
+                <parameter name="socketId">
+                    <description><![CDATA[the id of the socket through which data is to be sent]]></description>
+                </parameter>
+                <parameter name="content">
+                    <description><![CDATA[the content to be sent]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="target">
+                    <description><![CDATA[The name of a variable on which the operation's output will be placed]]></description>
+                </parameter>
+                <parameter name="targetValue">
+                    <description><![CDATA[An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+        <operation name="subscribeGroups">
+            <description><![CDATA[Subscribes the socket of the given socketId to the given groups. This operation can be used on the same socket as many times as necessary, each use being additive over previous ones. Repeated groups will be ignored. Works for both types INBOUND and OUTBOUND sockets.]]></description>
+            <parameters>
+                <parameter name="socketId">
+                    <description><![CDATA[the id of the socket to be subscribed]]></description>
+                </parameter>
+                <parameter name="groups">
+                    <description><![CDATA[the groups that the socket will be subscribed to]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+        <operation name="unsubscribeGroups">
+            <description><![CDATA[Unsubscribes the socket of the given socketId from the given groups. This operation can be used on the same socket as many times as necessary, each use being additive over previous ones. Works for both types INBOUND and OUTBOUND sockets.]]></description>
+            <parameters>
+                <parameter name="socketId">
+                    <description><![CDATA[the id of the socket to be subscribed]]></description>
+                </parameter>
+                <parameter name="groups">
+                    <description><![CDATA[the groups that the socket will be unsubscribed from]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+    </operations>
+    <sources>
+        <source name="inbound-listener">
+            <description><![CDATA[Exposes an endpoint through which external systems can connect through a WebSocket. This source will trigger the owning flow each time one of those WebSockets send information to this server. Additionally, any &lt;websocket:on-inbound-connection&gt; component with a matching path will also be triggered when that socket connection is established.]]></description>
+            <parameters>
+                <parameter name="path">
+                    <description><![CDATA[Relative path from the path set in the configuration]]></description>
+                </parameter>
+                <parameter name="defaultGroups">
+                    <description><![CDATA[The groups to which newly created sockets should be initially subscribed to]]></description>
+                </parameter>
+                <parameter name="outputMimeType">
+                    <description><![CDATA[The mime type of the payload that this operation outputs.]]></description>
+                </parameter>
+                <parameter name="outputEncoding">
+                    <description><![CDATA[The encoding of the payload that this operation outputs.]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="primaryNodeOnly">
+                    <description><![CDATA[Whether this source should only be executed on the primary node when runnning in Cluster]]></description>
+                </parameter>
+                <parameter name="streamingStrategy">
+                    <description><![CDATA[Configure if repeatable streams should be used and their behaviour]]></description>
+                </parameter>
+                <parameter name="redeliveryPolicy">
+                    <description><![CDATA[Defines a policy for processing the redelivery of the same message]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </source>
+        <source name="on-inbound-connection">
+            <description><![CDATA[Triggers when an inbound WebSocket connection is established]]></description>
+            <parameters>
+                <parameter name="path">
+                    <description><![CDATA[Relative path from the path set in the configuration]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="primaryNodeOnly">
+                    <description><![CDATA[Whether this source should only be executed on the primary node when runnning in Cluster]]></description>
+                </parameter>
+                <parameter name="redeliveryPolicy">
+                    <description><![CDATA[Defines a policy for processing the redelivery of the same message]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </source>
+        <source name="on-socket-closed">
+            <description><![CDATA[Triggers when a WebSocket is closed.]]></description>
+            <parameters>
+                <parameter name="path">
+                    <description><![CDATA[Relative path from the path set in the configuration]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="primaryNodeOnly">
+                    <description><![CDATA[Whether this source should only be executed on the primary node when runnning in Cluster]]></description>
+                </parameter>
+                <parameter name="redeliveryPolicy">
+                    <description><![CDATA[Defines a policy for processing the redelivery of the same message]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </source>
+        <source name="outbound-listener">
+            <description><![CDATA[Triggers when an outbound socket receives a message]]></description>
+            <parameters>
+                <parameter name="path">
+                    <description><![CDATA[Relative path from the path set in the configuration]]></description>
+                </parameter>
+                <parameter name="outputMimeType">
+                    <description><![CDATA[The mime type of the payload that this operation outputs.]]></description>
+                </parameter>
+                <parameter name="outputEncoding">
+                    <description><![CDATA[The encoding of the payload that this operation outputs.]]></description>
+                </parameter>
+                <parameter name="config-ref">
+                    <description><![CDATA[The name of the configuration to be used to execute this component]]></description>
+                </parameter>
+                <parameter name="primaryNodeOnly">
+                    <description><![CDATA[Whether this source should only be executed on the primary node when runnning in Cluster]]></description>
+                </parameter>
+                <parameter name="streamingStrategy">
+                    <description><![CDATA[Configure if repeatable streams should be used and their behaviour]]></description>
+                </parameter>
+                <parameter name="redeliveryPolicy">
+                    <description><![CDATA[Defines a policy for processing the redelivery of the same message]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </source>
+    </sources>
+    <types>
+        <type name="com.mulesoft.connectors.ws.api.BroadcastFailure">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="errorMessage">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="exception">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="socketId">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="type">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="uri">
+                    <description><![CDATA[]]></description>
+                </parameter>
+            </parameters>
+        </type>
+        <type name="com.mulesoft.connectors.ws.api.ClosedConnectionEvent">
+            <description><![CDATA[Contains information related to a WebSocket being closed
+
+ @since 1.0]]></description>
+            <parameters>
+                <parameter name="code">
+                    <description><![CDATA[The close code]]></description>
+                </parameter>
+                <parameter name="reason">
+                    <description><![CDATA[The reason phrase provided when the socket was closed.]]></description>
+                </parameter>
+            </parameters>
+        </type>
+        <type name="com.mulesoft.connectors.ws.api.InboundWebSocketAttributes">
+            <description><![CDATA[Represents the attributes of an inbound socket.
+
+ @since 1.0]]></description>
+            <parameters>
+                <parameter name="socketId">
+                    <description><![CDATA[The socket id]]></description>
+                </parameter>
+                <parameter name="socketType">
+                    <description><![CDATA[The socket type]]></description>
+                </parameter>
+                <parameter name="groups">
+                    <description><![CDATA[The groups on which this socket is subscribed]]></description>
+                </parameter>
+                <parameter name="path">
+                    <description><![CDATA[Full path where the request was received.]]></description>
+                </parameter>
+                <parameter name="requestUri">
+                    <description><![CDATA[Full URI of the request.]]></description>
+                </parameter>
+                <parameter name="scheme">
+                    <description><![CDATA[HTTP scheme of the request.]]></description>
+                </parameter>
+                <parameter name="queryParams">
+                    <description><![CDATA[Query parameters map built from the parsed string.]]></description>
+                </parameter>
+                <parameter name="headers">
+                    <description><![CDATA[Headers map built from the parsed string.]]></description>
+                </parameter>
+                <parameter name="uriParams">
+                    <description><![CDATA[URI parameters extracted from the request path.]]></description>
+                </parameter>
+                <parameter name="method">
+                    <description><![CDATA[HTTP method of the request.]]></description>
+                </parameter>
+                <parameter name="queryString">
+                    <description><![CDATA[Query string of the request.]]></description>
+                </parameter>
+                <parameter name="version">
+                    <description><![CDATA[HTTP version of the request.]]></description>
+                </parameter>
+                <parameter name="localAddress">
+                    <description><![CDATA[Local host address from the server.]]></description>
+                </parameter>
+                <parameter name="remoteAddress">
+                    <description><![CDATA[Remote host address from the sender.]]></description>
+                </parameter>
+                <parameter name="clientCertificate">
+                    <description><![CDATA[Client certificate (if 2 way TLS is enabled).]]></description>
+                </parameter>
+            </parameters>
+        </type>
+        <type name="com.mulesoft.connectors.ws.api.WebSocketAttributes">
+            <description><![CDATA[Represents a WebSocket's attributes
+
+ @since 1.0]]></description>
+            <parameters>
+                <parameter name="socketId">
+                    <description><![CDATA[The socket id]]></description>
+                </parameter>
+                <parameter name="socketType">
+                    <description><![CDATA[The socket type]]></description>
+                </parameter>
+                <parameter name="groups">
+                    <description><![CDATA[The groups on which this socket is subscribed]]></description>
+                </parameter>
+                <parameter name="path">
+                    <description><![CDATA[Full path where the request was received.]]></description>
+                </parameter>
+                <parameter name="requestUri">
+                    <description><![CDATA[Full URI of the request.]]></description>
+                </parameter>
+                <parameter name="scheme">
+                    <description><![CDATA[HTTP scheme of the request.]]></description>
+                </parameter>
+                <parameter name="queryParams">
+                    <description><![CDATA[Query parameters map built from the parsed string.]]></description>
+                </parameter>
+                <parameter name="headers">
+                    <description><![CDATA[Headers map built from the parsed string.]]></description>
+                </parameter>
+                <parameter name="uriParams">
+                    <description><![CDATA[URI parameters extracted from the request path.]]></description>
+                </parameter>
+                <parameter name="method">
+                    <description><![CDATA[HTTP method of the request.]]></description>
+                </parameter>
+                <parameter name="queryString">
+                    <description><![CDATA[Query string of the request.]]></description>
+                </parameter>
+            </parameters>
+        </type>
+        <type name="com.mulesoft.connectors.ws.api.client.WebSocketClientSettings">
+            <description><![CDATA[Settings to apply when opening outbound WebSocket connections
+
+ @since 1.0]]></description>
+            <parameters>
+                <parameter name="host">
+                    <description><![CDATA[Host where the requests will be sent.]]></description>
+                </parameter>
+                <parameter name="port">
+                    <description><![CDATA[Port where the requests will be sent. If the protocol attribute is WS (default) then the default value is 80, if the
+ protocol attribute is WSS then the default value is 443.]]></description>
+                </parameter>
+                <parameter name="basePath">
+                    <description><![CDATA[Base path to use for all outbound sockets that reference this config.]]></description>
+                </parameter>
+                <parameter name="protocol">
+                    <description><![CDATA[Protocol to use for outbound communication. Valid values are WS and WSS. Default value is WS. When using WSS the HTTP
+ communication is going to be secured using TLS/SSL. If WSS was configured as protocol then the user can customize the
+ TLS/SSL configuration by defining the tls:context parameter. If not tls:context is defined then
+ the default JVM certificates are going to be used to establish communication.]]></description>
+                </parameter>
+                <parameter name="tlsContext">
+                    <description><![CDATA[Reference to a TLS config element. This will enable WSS for outbound sockets.]]></description>
+                </parameter>
+                <parameter name="defaultHeaders">
+                    <description><![CDATA[Default HTTP headers the message should include.]]></description>
+                </parameter>
+                <parameter name="defaultQueryParams">
+                    <description><![CDATA[Default Query parameters the request should include.]]></description>
+                </parameter>
+                <parameter name="connectionIdleTimeout">
+                    <description><![CDATA[A timeout for idle connections to be closed. If not specified, there'll be no timeout.]]></description>
+                </parameter>
+                <parameter name="connectionIdleTimeoutUnit">
+                    <description><![CDATA[Timeout unit that qualifies the #connectionIdleTimeout]]></description>
+                </parameter>
+                <parameter name="followRedirects">
+                    <description><![CDATA[Specifies whether to follow redirects or not.]]></description>
+                </parameter>
+                <parameter name="preserveHeadersCase">
+                    <description><![CDATA[By default, header keys are stored internally in lower-case. This is to improve performance of headers handling and is
+ functionally correct as specified in the RFC.
+ <p>
+ In the case a server expects headers in a specific case, this flag may be set to true so the case of the header keys
+ are preserved.]]></description>
+                </parameter>
+                <parameter name="maxConnections">
+                    <description><![CDATA[The maximum number of outbound connections that will be kept open at the same time. By default the number of connections is
+ unlimited.]]></description>
+                </parameter>
+                <parameter name="proxyConfig">
+                    <description><![CDATA[Reusable configuration element for outbound connections through a proxy. A proxy element must define a host name and a port
+ attributes, and optionally can define a username and a password.]]></description>
+                </parameter>
+                <parameter name="authentication">
+                    <description><![CDATA[Authentication method to use for the HTTP request.]]></description>
+                </parameter>
+            </parameters>
+        </type>
+        <type name="com.mulesoft.connectors.ws.api.client.proxy.DefaultNtlmProxyConfig">
+            <description><![CDATA[A Proxy configuration for NTLM authentication proxies.
+
+ @since 1.0]]></description>
+            <parameters>
+                <parameter name="host">
+                    <description><![CDATA[Host where the proxy requests will be sent.]]></description>
+                </parameter>
+                <parameter name="port">
+                    <description><![CDATA[Port where the proxy requests will be sent.]]></description>
+                </parameter>
+                <parameter name="username">
+                    <description><![CDATA[The username to authenticate against the proxy.]]></description>
+                </parameter>
+                <parameter name="password">
+                    <description><![CDATA[The password to authenticate against the proxy.]]></description>
+                </parameter>
+                <parameter name="nonProxyHosts">
+                    <description><![CDATA[A list of comma separated hosts against which the proxy should not be used]]></description>
+                </parameter>
+                <parameter name="ntlmDomain">
+                    <description><![CDATA[The domain to authenticate against the proxy.]]></description>
+                </parameter>
+            </parameters>
+        </type>
+        <type name="com.mulesoft.connectors.ws.api.client.proxy.DefaultProxyConfig">
+            <description><![CDATA[Basic HTTP Proxy configuration based on host and port, and optionally a username and password for proxy authentication.
+
+ @since 1.0]]></description>
+            <parameters>
+                <parameter name="host">
+                    <description><![CDATA[Host where the proxy requests will be sent.]]></description>
+                </parameter>
+                <parameter name="port">
+                    <description><![CDATA[Port where the proxy requests will be sent.]]></description>
+                </parameter>
+                <parameter name="username">
+                    <description><![CDATA[The username to authenticate against the proxy.]]></description>
+                </parameter>
+                <parameter name="password">
+                    <description><![CDATA[The password to authenticate against the proxy.]]></description>
+                </parameter>
+                <parameter name="nonProxyHosts">
+                    <description><![CDATA[A list of comma separated hosts against which the proxy should not be used]]></description>
+                </parameter>
+            </parameters>
+        </type>
+        <type name="com.mulesoft.connectors.ws.api.client.proxy.HttpProxyConfig">
+            <description><![CDATA[Marker interface for exposing the proxy configuration as an imported type.]]></description>
+            <parameters/>
+        </type>
+        <type name="com.mulesoft.connectors.ws.api.server.WebSocketServerSettings">
+            <description><![CDATA[Settings to apply when exposing WebSocket endpoints
+
+ @since 1.0]]></description>
+            <parameters>
+                <parameter name="listenerBasePath">
+                    <description><![CDATA[Base path to use for all resources served through this config.]]></description>
+                </parameter>
+                <parameter name="listenerConfig">
+                    <description><![CDATA[Reference to the http:listener-config used to expose the inbound endpoint]]></description>
+                </parameter>
+                <parameter name="idleSocketTimeout">
+                    <description><![CDATA[Timeout for automatically closing idle WebSockets]]></description>
+                </parameter>
+                <parameter name="idleSocketTimeoutUnit">
+                    <description><![CDATA[Time unit that qualifies the #idleSocketTimeout]]></description>
+                </parameter>
+            </parameters>
+        </type>
+    </types>
+</extension-documentation>

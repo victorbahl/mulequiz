@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<flow name="clearEndedGame" doc:id="f3ff54bb-028a-4088-9a14-f2a6546f4db8" >
+		<scheduler doc:name="At 02:00" doc:id="6bcc4a18-2452-42ec-8faf-81ecacf58658">
+			<scheduling-strategy>
+				<cron expression="0 0 2 * * ?" timeZone="Europe/Paris"/>
+			</scheduling-strategy>
+		</scheduler>
+		<os:retrieve-all-keys doc:name="gameIds" doc:id="d8f54c06-9f98-4655-bf46-4e682d0d4756" objectStore="OS_Game" target="gameIds"/>
+		<foreach doc:name="For Each" doc:id="ab5f153d-9fa0-4f14-a850-a4a7fe0c5e69" collection="#[vars.gameIds]">
+			<os:retrieve doc:name="game" doc:id="90cdc557-64ea-4ee3-a989-42293d8d00ef" key="#[payload]" objectStore="OS_Game" target="game"/>
+			<choice doc:name="Choice" doc:id="0064a91b-e5cc-4e8e-8800-6804b7a581b9" >
+				<when expression="#[vars.game.status.status == 'ended']">
+					<os:remove doc:name="game" doc:id="95ebc428-0392-44de-9c0d-f597f93b3cd9" key="#[payload]" objectStore="OS_Game"/>
+				</when>
+				<otherwise >
+					<logger level="INFO" doc:name="Logger" doc:id="41309620-a1c6-4d93-bc96-09f06e597753" />
+				</otherwise>
+			</choice>
+		</foreach>
+	</flow>
+	<flow name="generateNewId" doc:id="16e08495-67ef-40d6-846e-274b9bd268c8" >
+		<ee:transform doc:name="Generate Id" doc:id="04f10e50-4dfa-4314-8dac-60e4dd6c3c72" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var a = 'abcdefghijklmnopqrstuvwxyz'
+var s = sizeOf(a) - 1
+fun block() = a[randomInt(s)] ++ a[randomInt(s)] ++ a[randomInt(s)]
+---
+block() ++ '-' ++ block() ++ '-' ++ block()]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<os:contains doc:name="Id in OS ?" doc:id="31f09e3b-9384-41c8-92ad-e932f02da7d6" key="#[payload]" objectStore="OS_Game" target="exists"/>
+		<choice doc:name="Choice" doc:id="7d9d610a-46f6-4682-b5ae-1c63f16e3dfb" >
+			<when expression="#[vars.exists == true]">
+				<raise-error doc:name="Raise error" doc:id="a8d5e851-a685-4020-8b3b-bab36f9ca9ef" type="GENID:ALREADY_EXISTS"/>
+			</when>
+		</choice>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="0b1a3e0f-ac98-457a-9d5f-9cb89364f0f3" type="GENID:ALREADY_EXISTS">
+				<logger level="INFO" doc:name="Logger" doc:id="56fddebf-c074-4da2-9441-00a918490a3d" message='#["ID " ++ payload ++ " already exists"]'/>
+				<flow-ref doc:name="Regenerate an Id" doc:id="1918f0cf-d2c3-49d1-8e20-57c53639d0b5" name="generateNewId"/>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>

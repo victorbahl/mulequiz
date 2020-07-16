@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension-documentation>
+    <configs>
+        <config name="consumer-config">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="ackMode">
+                    <description><![CDATA[Defines the way that the Kafka Broker instance is notified of the consumption of messages. AUTO: Messages are committed only if the flow is finished successfully. MANUAL: The user must commit manually through the Commit operation. IMMEDIATE: Mule automatically commits the messages upon reception and before triggering the flow. DUPS_OK: Same as the MANUAL mode, but the commit is made asynchronously, which can lead to duplicate records.]]></description>
+                </parameter>
+                <parameter name="pollTimeout">
+                    <description><![CDATA[The time, in time units, spent waiting to do a poll if data is not available in the buffer (fetched). If no value is set, returns immediately with any records that are available currently in the buffer, else returns empty. Must not be negative.]]></description>
+                </parameter>
+                <parameter name="pollTimeoutTimeUnit">
+                    <description><![CDATA[The time unit for the polling timeout. This combines with pollTimeout to define the total timeout for the polling.]]></description>
+                </parameter>
+                <parameter name="operationTimeout">
+                    <description><![CDATA[The time, in time units, spent waiting for an operation to finish. If no value is set or a negative value is set, the operation will wait forever. Must not be negative.]]></description>
+                </parameter>
+                <parameter name="operationTimeoutTimeUnit">
+                    <description><![CDATA[The time unit for the operation timeout. This combines with operationTimeout to define the total default timeout for the operations that use this config.]]></description>
+                </parameter>
+                <parameter name="zoneId">
+                    <description><![CDATA[Zone ID used to convert the provided timestamps into ZonedLocalDateTimes in the results. Default value is the system one.]]></description>
+                </parameter>
+            </parameters>
+        </config>
+        <config name="producer-config">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="topic">
+                    <description><![CDATA[A default topic name to be used by the producer operations, overridable at operation config level.]]></description>
+                </parameter>
+                <parameter name="zoneId">
+                    <description><![CDATA[TODO: Add comments.]]></description>
+                </parameter>
+                <parameter name="expirationPolicy">
+                    <description><![CDATA[Configures the minimum amount of time that a dynamic configuration instance can remain idle before the runtime considers it eligible for expiration. This does not mean that the platform will expire the instance at the exact moment that it becomes eligible. The runtime will actually purge the instances when it sees it fit.]]></description>
+                </parameter>
+            </parameters>
+        </config>
+    </configs>
+    <connections>
+        <connection name="consumer-plaintext-connection">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="bootstrapServers">
+                    <description><![CDATA[The list of servers to bootstrap the connection with the kafka cluster. This can be a partial list of the available servers.]]></description>
+                </parameter>
+                <parameter name="groupId">
+                    <description><![CDATA[TODO: What should the default value for this be? config name? Default Group ID for all the Kafka Consumers that use this configuration.]]></description>
+                </parameter>
+                <parameter name="consumerAmount">
+                    <description><![CDATA[Determines the number of consumers the connection will initially create.]]></description>
+                </parameter>
+                <parameter name="maximumPollingInterval">
+                    <description><![CDATA[The configuration controls the maximum amount of time the client will wait for the response of a request. If the response is not received before the timeout elapses the client will resend the request if necessary or fail the request if retries are exhausted. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="maximumPollingIntervalTimeUnit">
+                    <description><![CDATA[Determines the time unit for request timeout scalar. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="isolationLevel">
+                    <description><![CDATA[Controls how to read messages written transactionally. If set to <code>read_committed</code>, consumer.poll() will only return" + " transactional messages which have been committed. If set to <code>read_uncommitted</code>' (the default), consumer.poll() will return all messages, even transactional messages" + " which have been aborted. Non-transactional messages will be returned unconditionally in either mode.</p> <p>Messages will always be returned in offset order. Hence, in " + " <code>read_committed</code> mode, consumer.poll() will only return messages up to the last stable offset (LSO), which is the one less than the offset of the first open transaction." + " In particular any messages appearing after messages belonging to ongoing transactions will be withheld until the relevant transaction has been completed. As a result, <code>read_committed</code>" + " consumers will not be able to read up to the high watermark when there are in flight transactions.</p><p> Further, when in <code>read_committed</code> the seekToEnd method will" + " return the LSO]]></description>
+                </parameter>
+                <parameter name="excludeInternalTopics">
+                    <description><![CDATA[Whether internal topics matching a subscribed pattern should be excluded from the subscription. It is always possible to explicitly subscribe to an internal topic.]]></description>
+                </parameter>
+                <parameter name="autoOffsetReset">
+                    <description><![CDATA[What to do when there is no initial offset in Kafka or if the current offset does not exist any more on the server (e.g. because that data has been deleted): EARLIEST: automatically reset the offset to the earliest offset. LATEST: automatically reset the offset to the latest offset. ERROR: throw error to the if no previous offset is found for the consumer's group.]]></description>
+                </parameter>
+                <parameter name="retryBackoffTimeout">
+                    <description><![CDATA[The amount of time to wait before attempting to retry a failed request to a given topic partition. This avoids repeatedly sending requests in a tight loop under some failure scenarios.]]></description>
+                </parameter>
+                <parameter name="retryBackoffTimeoutTimeUnit">
+                    <description><![CDATA[Determines the time unit for the reconnect backoff timeout scalar.]]></description>
+                </parameter>
+                <parameter name="enableCRCCheck">
+                    <description><![CDATA[Automatically check the CRC32 of the records consumed. This ensures no on-the-wire or on-disk corruption to the messages occurred. This check adds some overhead, so it may be disabled in cases seeking extreme performance.]]></description>
+                </parameter>
+                <parameter name="receiveBufferSize">
+                    <description><![CDATA[The size of the TCP receive buffer (SO_RCVBUF) to use when reading data. If the value is -1, the OS default will be used. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="receiveBufferSizeUnit">
+                    <description><![CDATA[The unit of measure for the receive buffer size scalar. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="sendBufferSize">
+                    <description><![CDATA[The size of the TCP send buffer (SO_SNDBUF) to use when sending data. If the value is -1, the OS default will be used. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="sendBufferSizeUnit">
+                    <description><![CDATA[The unit of measure for the send buffer size scalar. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="requestTimeout">
+                    <description><![CDATA[The configuration controls the maximum amount of time the client will wait for the response of a request. If the response is not received before the timeout elapses the client will resend the request if necessary or fail the request if retries are exhausted. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="requestTimeoutTimeUnit">
+                    <description><![CDATA[Determines the time unit for request timeout scalar. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="recordLimit">
+                    <description><![CDATA[The maximum number of records returned on a poll call to the Kafka cluster. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="clientDNSLookup">
+                    <description><![CDATA[Controls how the client uses DNS lookups. If set to use_all_dns_ips then, when the lookup returns multiple IP addresses for a hostname, they will all be attempted to connect to before failing the connection. Applies to both bootstrap and advertised servers. If the value is resolve_canonical_bootstrap_servers_only each entry will be resolved and expanded into a list of canonical names.]]></description>
+                </parameter>
+                <parameter name="heartbeatInterval">
+                    <description><![CDATA[The expected time between heartbeats to the consumer coordinator when using Kafka's group management facilities. Heartbeats are used to ensure that the consumer's session stays active and to facilitate rebalancing when new consumers join or leave the group. The value must be set lower than session.timeout.ms, but typically should be set no higher than 1/3 of that value. It can be adjusted even lower to control the expected time for normal rebalances.]]></description>
+                </parameter>
+                <parameter name="heartbeatIntervalTimeUnit">
+                    <description><![CDATA[Determines the time unit for fetch heartbeat interval time scalar.]]></description>
+                </parameter>
+                <parameter name="sessionTimeout">
+                    <description><![CDATA[The timeout used to detect consumer failures when using Kafka's group management facility. The consumer sends periodic heartbeats to indicate its liveness to the broker. If no heartbeats are received by the broker before the expiration of this session timeout, then the broker will remove this consumer from the group and initiate a rebalance. Note that the value must be in the allowable range as configured in the broker configuration by group.min.session.timeout.ms and group.max.session.timeout.ms.]]></description>
+                </parameter>
+                <parameter name="sessionTimeoutTimeUnit">
+                    <description><![CDATA[Determines the time unit for session timeout scalar.]]></description>
+                </parameter>
+                <parameter name="connectionsMaximumIdleTime">
+                    <description><![CDATA[Close idle connections after the number of milliseconds specified by this config.]]></description>
+                </parameter>
+                <parameter name="connectionsMaximumIdleTimeUnit">
+                    <description><![CDATA[Determines the time unit for connections maximum idle time scalar.]]></description>
+                </parameter>
+                <parameter name="tlsContext">
+                    <description><![CDATA[Protocol to use for communication. Valid values are HTTP and HTTPS. Default value is HTTP. When using HTTPS the HTTP communication is going to be secured using TLS / SSL. If HTTPS was configured as protocol then the user needs to configure at least the keystore in the tls:context child element of this listener-config.]]></description>
+                </parameter>
+                <parameter name="topicPatterns">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="assignments">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="fetchMinimumSize">
+                    <description><![CDATA[The minimum amount of data the server should return for a fetch request. If insufficient data is available the request will wait for that much data to accumulate before answering the request. The default setting of 1 byte means that fetch requests are answered as soon as a single byte of data is available or the fetch request times out waiting for data to arrive. Setting this to something greater than 1 will cause the server to wait for larger amounts of data to accumulate which can improve server throughput a bit at the cost of some additional latency. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="fetchMinimumSizeUnit">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="fetchMaximumSize">
+                    <description><![CDATA[The maximum amount of data the server should return for a fetch request. Records are fetched in batches by the consumer, and if the first record batch in the first non-empty partition of the fetch is larger than this value, the record batch will still be returned to ensure that the consumer can make progress. As such, this is not an absolute maximum. The maximum record batch size accepted by the broker is defined via message.max.bytes (broker config) or max.message.bytes (topic config). Note that the consumer performs multiple fetches in parallel. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="fetchMaximumSizeUnit">
+                    <description><![CDATA[The unit of measure for the maximum partition fetch size scalar. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="maximumPartitionFetchSize">
+                    <description><![CDATA[The maximum amount of data per-partition the server will return. Records are fetched in batches by the consumer. If the first record batch in the first non-empty partition of the fetch is larger than this limit, the batch will still be returned to ensure that the consumer can make progress. The maximum record batch size accepted by the broker is defined via message.max.bytes (broker config) or max.message.bytes (topic config). See fetch.max.bytes for limiting the consumer request size.This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="maximumPartitionFetchSizeUnit">
+                    <description><![CDATA[The unit of measure for the maximum partition fetch size scalar. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="fetchMaximumWaitTimeout">
+                    <description><![CDATA[The maximum amount of time the server will block before answering the fetch request if there isn't sufficient data to immediately satisfy the requirement given by fetch.min.bytes.]]></description>
+                </parameter>
+                <parameter name="fetchMaximumWaitTimeoutUnit">
+                    <description><![CDATA[Determines the time unit for fetch maximum wait timeout scalar.]]></description>
+                </parameter>
+                <parameter name="reconnection">
+                    <description><![CDATA[When the application is deployed, a connectivity test is performed on all connectors. If set to true, deployment will fail if the test doesn't pass after exhausting the associated reconnection strategy]]></description>
+                </parameter>
+            </parameters>
+        </connection>
+        <connection name="producer-plaintext-connection">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="bootstrapServers">
+                    <description><![CDATA[The list of servers to bootstrap the connection with the kafka cluster. This can be a partial list of the available servers.]]></description>
+                </parameter>
+                <parameter name="batchSize">
+                    <description><![CDATA[The producer will attempt to batch records together into fewer requests whenever multiple records are being sent to the same partition. This helps performance on both the client and the server. This configuration controls the default batch size in bytes. No attempt will be made to batch records larger than this size. Requests sent to brokers will contain multiple batches, one for each partition with data available to be sent. A small batch size will make batching less common and may reduce throughput (a batch size of zero will disable batching entirely). A very large batch size may use memory a bit more wastefully as we will always allocate a buffer of the specified batch size in anticipation of additional records.]]></description>
+                </parameter>
+                <parameter name="batchSizeUnit">
+                    <description><![CDATA[The unit of measure for the batch size scalar.]]></description>
+                </parameter>
+                <parameter name="bufferSize">
+                    <description><![CDATA[The total bytes of memory the producer can use to buffer records waiting to be sent to the server. If records are sent faster than they can be delivered to the server the producer will block for max.block.ms after which it will throw an exception. This setting should correspond roughly to the total memory the producer will use, but is not a hard bound since not all memory the producer uses is used for buffering. Some additional memory will be used for compression (if compression is enabled) as well as for maintaining in-flight requests. The default value in the Kafka docs is of 33554432 (32MB), but this should be capped to align with expected values for mule instances in cloudhub (v0.1 core)]]></description>
+                </parameter>
+                <parameter name="bufferSizeUnit">
+                    <description><![CDATA[The unit of measure for the max request size scalar.]]></description>
+                </parameter>
+                <parameter name="clientDNSLookup">
+                    <description><![CDATA[Controls how the client uses DNS lookups. If set to use_all_dns_ips then, when the lookup returns multiple IP addresses for a hostname, they will all be attempted to connect to before failing the connection. Applies to both bootstrap and advertised servers. If the value is resolve_canonical_bootstrap_servers_only each entry will be resolved and expanded into a list of canonical names.]]></description>
+                </parameter>
+                <parameter name="compressionType">
+                    <description><![CDATA[The compression type for all data generated by the producer. The default is none (i.e. no compression). Valid values are none, gzip, snappy, lz4, or zstd. Compression is of full batches of data, so the efficacy of batching will also impact the compression ratio (more batching means better compression).]]></description>
+                </parameter>
+                <parameter name="connectionsMaximumIdleTimeout">
+                    <description><![CDATA[Close idle connections after the value specified by this config.]]></description>
+                </parameter>
+                <parameter name="connectionsMaximumIdleTimeUnit">
+                    <description><![CDATA[Determines the time unit for the connections maximum idle scalar.]]></description>
+                </parameter>
+                <parameter name="deliveryTimeout">
+                    <description><![CDATA[An upper bound on the time to report success or failure after a call to send() returns. This limits the total time that a record will be delayed prior to sending, the time to await acknowledgement from the broker (if expected), and the time allowed for retriable send failures. The producer may report failure to send a record earlier than this config if either an unrecoverable error is encountered, the retries have been exhausted, or the record is added to a batch which reached an earlier delivery expiration deadline. The value of this config should be greater than or equal to the sum of request.timeout.ms and linger.ms.]]></description>
+                </parameter>
+                <parameter name="deliveryTimeoutTimeUnit">
+                    <description><![CDATA[Determines the time unit for the delivery timeout scalar.]]></description>
+                </parameter>
+                <parameter name="idempotence">
+                    <description><![CDATA[When set to 'true', the producer will ensure that exactly one copy of each message is written in the stream. If 'false', producer retries due to broker failures, etc, may write duplicates of the retried message in the stream. Note that enabling idempotence requires max.in.flight.requests.per.connection to be less than or equal to 5, retries to be greater than 0 and acks must be 'all'. If these values are not explicitly set by the user, suitable values will be chosen. If incompatible values are set, a ConnectionException will be thrown]]></description>
+                </parameter>
+                <parameter name="lingerTime">
+                    <description><![CDATA[The producer groups together any records that arrive in between request transmissions into a single batched request. Normally this occurs only under load when records arrive faster than they can be sent out. However in some circumstances the client may want to reduce the number of requests even under moderate load. This setting accomplishes this by adding a small amount of artificial delay?that is, rather than immediately sending out a record the producer will wait for up to the given delay to allow other records to be sent so that the sends can be batched together. This can be thought of as analogous to Nagle's algorithm in TCP. This setting gives the upper bound on the delay for batching: once we get batch.size worth of records for a partition it will be sent immediately regardless of this setting, however if we have fewer than this many bytes accumulated for this partition we will 'linger' for the specified time waiting for more records to show up. This setting defaults to 0 (i.e. no delay). Setting linger.ms=5, for example, would have the effect of reducing the number of requests sent but would add up to 5ms of latency to records sent in the absence of load.]]></description>
+                </parameter>
+                <parameter name="lingerTimeUnit">
+                    <description><![CDATA[Determines the time unit for the linger time scalar.]]></description>
+                </parameter>
+                <parameter name="maximumBlockTime">
+                    <description><![CDATA[The configuration controls how long KafkaProducer.send() and KafkaProducer.partitionsFor() will block.These methods can be blocked either because the buffer is full or metadata unavailable.Blocking in the user-supplied serializers or partitioner will not be counted against this timeout.]]></description>
+                </parameter>
+                <parameter name="maximumBlockTimeUnit">
+                    <description><![CDATA[Determines the time unit for the maximum block time scalar.]]></description>
+                </parameter>
+                <parameter name="maximumInFlightRequests">
+                    <description><![CDATA[The maximum number of unacknowledged requests the client will send on a single connection before blocking. Note that if this setting is set to be greater than 1 and there are failed sends, there is a risk of message re-ordering due to retries (i.e., if retries are enabled).]]></description>
+                </parameter>
+                <parameter name="maximumRequestSize">
+                    <description><![CDATA[The maximum size of a request in bytes. This setting will limit the number of record batches the producer will send in a single request to avoid sending huge requests. This is also effectively a cap on the maximum record batch size. Note that the server has its own cap on record batch size which may be different from this.]]></description>
+                </parameter>
+                <parameter name="maximumRequestSizeUnit">
+                    <description><![CDATA[The unit of measure for the max request size scalar.]]></description>
+                </parameter>
+                <parameter name="producerAck">
+                    <description><![CDATA[The number of acknowledgments the producer requires the leader to have received before considering a request complete. This controls the durability of records that are sent]]></description>
+                </parameter>
+                <parameter name="receiveBufferSize">
+                    <description><![CDATA[The size of the TCP receive buffer (SO_RCVBUF) to use when reading data. If the value is -1, the OS default will be used. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="receiveBufferSizeUnit">
+                    <description><![CDATA[The unit of measure for the receive buffer size scalar. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="retries">
+                    <description><![CDATA[Setting a value greater than zero will cause the client to resend any record whose send fails with a potentially transient error. Note that this retry is no different than if the client resent the record upon receiving the error. Allowing retries without setting max.in.flight.requests.per.connection to 1 will potentially change the ordering of records because if two batches are sent to a single partition, and the first fails and is retried but the second succeeds, then the records in the second batch may appear first. Note additionally that produce requests will be failed before the number of retries has been exhausted if the timeout configured by delivery.timeout.ms expires first before successful acknowledgement. Users should generally prefer to leave this config unset and instead use delivery.timeout.ms to control retry behavior.]]></description>
+                </parameter>
+                <parameter name="retryBackoffTimeout">
+                    <description><![CDATA[The amount of time to wait before attempting to retry a failed request to a given topic partition. This avoids repeatedly sending requests in a tight loop under some failure scenarios.]]></description>
+                </parameter>
+                <parameter name="retryBackoffTimeoutTimeUnit">
+                    <description><![CDATA[Determines the time unit for the retry backoff timeout time scalar.]]></description>
+                </parameter>
+                <parameter name="sendBufferSize">
+                    <description><![CDATA[The size of the TCP send buffer (SO_SNDBUF) to use when sending data. If the value is -1, the OS default will be used. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="sendBufferSizeUnit">
+                    <description><![CDATA[The unit of measure for the send buffer size scalar. This parameter can be overridden at source level.]]></description>
+                </parameter>
+                <parameter name="requestTimeout">
+                    <description><![CDATA[The configuration controls the maximum amount of time the client will wait for the response of a request. If the response is not received before the timeout elapses the client will resend the request if necessary or fail the request if retries are exhausted. This should be larger than replica.lag.time.max.ms (a broker configuration) to reduce the possibility of message duplication due to unnecessary producer retries.]]></description>
+                </parameter>
+                <parameter name="requestTimeoutTimeUnit">
+                    <description><![CDATA[Determines the time unit for the request timeout time scalar.]]></description>
+                </parameter>
+                <parameter name="tlsContext">
+                    <description><![CDATA[Protocol to use for communication. Valid values are HTTP and HTTPS. Default value is HTTP. When using HTTPS the HTTP communication is going to be secured using TLS / SSL. If HTTPS was configured as protocol then the user needs to configure at least the keystore in the tls:context child element of this listener-config.]]></description>
+                </parameter>
+                <parameter name="reconnection">
+                    <description><![CDATA[When the application is deployed, a connectivity test is performed on all connectors. If set to true, deployment will fail if the test doesn't pass after exhausting the associated reconnection strategy]]></description>
+                </parameter>
+            </parameters>
+        </connection>
+    </connections>
+    <extension name="Apache Kafka">
+        <description><![CDATA[]]></description>
+        <parameters/>
+    </extension>
+    <operations>
+        <operation name="commit">
+            <description><![CDATA[Commits the offsets associated to a message or batch of messages consumed in a Message Listener. This would be a List or a single message consumed in the BatchMessageListenerSource]]></description>
+            <parameters>
+                <parameter name="commitKey">
+                    <description><![CDATA[The commitKey of the last poll. This operation is only valid when used inside a flow that is using on of the MessageListenerSource(s) ( BatchMessageListenerSource / BatchMessageListenerSource) which insert this value as an attribute in the Mule Event]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+        <operation name="consume">
+            <description><![CDATA[This operation allows receiving messages from one or more Kafka topics, it works very similarly to the Message Listener source, so all the operations that apply to that, will apply to this operation as well.]]></description>
+            <parameters>
+                <parameter name="pollTimeout">
+                    <description><![CDATA[The amount of TimeUnits that this operation will wait for receiving messages.]]></description>
+                </parameter>
+                <parameter name="pollTimeoutTimeUnit">
+                    <description><![CDATA[The unit of time for the timeout property.]]></description>
+                </parameter>
+                <parameter name="operationTimeout">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="operationTimeoutTimeUnit">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="streamingStrategy">
+                    <description><![CDATA[Configure if repeatable streams should be used and their behaviour]]></description>
+                </parameter>
+                <parameter name="target">
+                    <description><![CDATA[The name of a variable on which the operation's output will be placed]]></description>
+                </parameter>
+                <parameter name="targetValue">
+                    <description><![CDATA[An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+        <operation name="seek">
+            <description><![CDATA[Sets the current offset of the consumer for the given topic and partition to the provided offset value.]]></description>
+            <parameters>
+                <parameter name="topic">
+                    <description><![CDATA[The name of the topic on which the seek operation will be performed.]]></description>
+                </parameter>
+                <parameter name="partition">
+                    <description><![CDATA[The partition number that will have its offset modified.]]></description>
+                </parameter>
+                <parameter name="offset">
+                    <description><![CDATA[The offset value to commit for the configured partition.]]></description>
+                </parameter>
+                <parameter name="operationTimeout">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="operationTimeoutTimeUnit">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+        <operation name="publish">
+            <description><![CDATA[Publish a message to the specified kafka topic, optionally specifying the partition, key and message content for it. The publish operation supports transactions.]]></description>
+            <parameters>
+                <parameter name="topic">
+                    <description><![CDATA[The topic to publish to]]></description>
+                </parameter>
+                <parameter name="partition">
+                    <description><![CDATA[Optional The partition tof]]></description>
+                </parameter>
+                <parameter name="key">
+                    <description><![CDATA[Optional key for the published message]]></description>
+                </parameter>
+                <parameter name="message">
+                    <description><![CDATA[Optional message content of the message]]></description>
+                </parameter>
+                <parameter name="headers">
+                    <description><![CDATA[Optional headers for the message]]></description>
+                </parameter>
+                <parameter name="transactionalAction">
+                    <description><![CDATA[The type of joining action that operations can take regarding transactions.]]></description>
+                </parameter>
+                <parameter name="target">
+                    <description><![CDATA[The name of a variable on which the operation's output will be placed]]></description>
+                </parameter>
+                <parameter name="targetValue">
+                    <description><![CDATA[An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </operation>
+    </operations>
+    <sources>
+        <source name="batch-message-listener">
+            <description><![CDATA[This source supports the consumption of messages from a Kafka Cluster, producing a List of messages to the flow.]]></description>
+            <parameters>
+                <parameter name="pollTimeout">
+                    <description><![CDATA[TODO :Add docs.]]></description>
+                </parameter>
+                <parameter name="pollTimeoutTimeUnit">
+                    <description><![CDATA[TODO :Add docs.]]></description>
+                </parameter>
+                <parameter name="ackMode">
+                    <description><![CDATA[TODO :Add docs.]]></description>
+                </parameter>
+                <parameter name="parallelConsumersAmount">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="primaryNodeOnly">
+                    <description><![CDATA[Whether this source should only be executed on the primary node when runnning in Cluster]]></description>
+                </parameter>
+                <parameter name="redeliveryPolicy">
+                    <description><![CDATA[Defines a policy for processing the redelivery of the same message]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </source>
+        <source name="message-listener">
+            <description><![CDATA[This source supports the consumption of messages from a Kafka Cluster, producing a single message to the flow.]]></description>
+            <parameters>
+                <parameter name="pollTimeout">
+                    <description><![CDATA[TODO :Add docs.]]></description>
+                </parameter>
+                <parameter name="pollTimeoutTimeUnit">
+                    <description><![CDATA[TODO :Add docs.]]></description>
+                </parameter>
+                <parameter name="ackMode">
+                    <description><![CDATA[TODO :Add docs.]]></description>
+                </parameter>
+                <parameter name="parallelConsumersAmount">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="primaryNodeOnly">
+                    <description><![CDATA[Whether this source should only be executed on the primary node when runnning in Cluster]]></description>
+                </parameter>
+                <parameter name="redeliveryPolicy">
+                    <description><![CDATA[Defines a policy for processing the redelivery of the same message]]></description>
+                </parameter>
+                <parameter name="reconnectionStrategy">
+                    <description><![CDATA[A retry strategy in case of connectivity errors]]></description>
+                </parameter>
+            </parameters>
+        </source>
+    </sources>
+    <types>
+        <type name="com.mulesoft.connectors.kafka.api.KafkaRecordAttributes">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="creationTimestamp">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="headers">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="key">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="leaderEpoch">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="logAppendTimestamp">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="offset">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="partition">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="serializedKeySize">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="serializedValueSize">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="topic">
+                    <description><![CDATA[]]></description>
+                </parameter>
+            </parameters>
+        </type>
+        <type name="com.mulesoft.connectors.kafka.api.operation.KafkaMessageMetadata">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="offset">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="partition">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="serializedKeySize">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="serializedValueSize">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="timestamp">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="topic">
+                    <description><![CDATA[]]></description>
+                </parameter>
+            </parameters>
+        </type>
+        <type name="com.mulesoft.connectors.kafka.api.source.TopicPartition">
+            <description><![CDATA[]]></description>
+            <parameters>
+                <parameter name="topic">
+                    <description><![CDATA[]]></description>
+                </parameter>
+                <parameter name="partition">
+                    <description><![CDATA[]]></description>
+                </parameter>
+            </parameters>
+        </type>
+    </types>
+</extension-documentation>

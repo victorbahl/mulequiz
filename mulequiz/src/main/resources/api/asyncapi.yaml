@@ -1,0 +1,179 @@
+asyncapi: 2.0.0
+info:
+  title: MuleQuiz Async API
+  version: '1.0.0'
+  description: |
+    The MuleQuiz Async API allows you to play with your friends / colleagues and improve your knowledge about MuleSoft.
+
+    ### Check out its awesome features:
+
+    * Real-time chat while playing 💬
+    * Async specifications allowing you to easily understand it and develop your own client 📃
+    * A simple HTML/JS client to test it: [link](https://api.victorbahl.com/mquiz) 🌐
+    * Documentation of the WebSocket implementation with MuleSoft available here: [link](https://github.com) 🎉
+
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  production:
+    url: wss://api.victorbahl.com:443
+    protocol: wss
+
+defaultContentType: application/json
+
+channels:
+  mquiz/{gameId}:
+    description: The topic on which game events may be produced and consumed.
+    parameters:
+      gameId:
+        $ref: '#/components/parameters/gameId'
+    publish:
+      operationId: pub
+      summary: Send messages, actions to execute on a particular game (eg. start game, messages)
+      message:
+        $ref: '#/components/messages/pubMsg'
+    subscribe:
+      operationId: sub
+      summary: Receive information of a particular game (eg. game status, messages)
+      message:
+        $ref: '#/components/messages/subMsg'
+
+components:
+  messages:
+    pubMsg:
+      name: pubMsg
+      title: Publish Message
+      summary: Message that can be sent by a player in a game room (chat message or action)
+      contentType: application/json
+      payload:
+        oneOf:
+          - $ref: '#/components/schemas/action'
+          - $ref: '#/components/schemas/chat'
+    
+    subMsg:
+      name: subMsg
+      title: Subscribe Message
+      summary: Message that can be received by a player in a game room (chat message or status)
+      contentType: application/json
+      payload:
+        oneOf:
+          - $ref: '#/components/schemas/status'
+          - $ref: '#/components/schemas/chat'
+
+  schemas:
+    msg:
+      type: object
+      discriminator: type
+      properties:
+        'type':
+          type: string
+          enum: [chat, action, status]
+        sentAt:
+          $ref: "#/components/schemas/sentAt"
+      required:
+      - type
+    
+    chat:
+      description: A chat message
+      allOf:
+      - $ref: '#/components/schemas/msg'
+      - type: object
+        properties:
+          data:
+            type: object
+            properties:
+              from:
+                type: object
+                properties:
+                  sid:
+                    type: string
+                  nickname:
+                    type: string
+              text:
+                type: string
+              rightAnswer:
+                type: boolean
+        required:
+        - data
+        example:
+          type: chat
+          data:
+            from:
+              sid: znhcp
+              nickname: Victor
+            text: Hello World!
+            rightAnswer: false
+          sentAt: 2020-07-21T17:32:28Z
+
+    action:
+      description: An action message. From the players to the game master.
+      allOf:
+      - $ref: '#/components/schemas/msg'
+      - type: object
+        properties:
+          data:
+            type: object
+            properties:
+              action:
+                type: string
+        required:
+        - data
+        example:
+          type: action
+          data:
+            action: start    
+
+    status:
+      description: A status message. From the game master to the players.
+      allOf:
+      - $ref: '#/components/schemas/msg'
+      - type: object
+        properties:
+          data:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: [toBeStarted, started, ended]
+              mainMessage:
+                type: string
+              timeLeft:
+                type: integer
+              players:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    sid:
+                      type: string
+                    nickname:
+                      type: string
+                    score:
+                      type: integer
+        required:
+        - data
+        example:
+          type: status
+          data:
+            status: toBeStarted
+            mainMessage: The game hasn't started yet, press START to begin!
+            players:
+              - sid: znhcp
+                nickname: Victor
+                score: 0
+              - sid: tyyty
+                nickname: Clément
+                score: 0
+
+    sentAt:
+      type: string
+      format: date-time
+      description: Date and time when the message was sent.
+
+  parameters:
+    gameId:
+      description: The ID of the game room.
+      schema:
+        type: string

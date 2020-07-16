@@ -1,0 +1,6384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <base href="./">
+  <title>MuleQuiz Async API 1.0.0 documentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="css/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+  <div class="relative md:flex lg:flex xl:flex">
+    
+
+<input id="burger-menu" type="checkbox" />
+<label for="burger-menu" class="shadow">
+  <div class="wrapper">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</label>
+<div class="sidebar-panel fixed pin-t pin-l pin-b w-64 bg-grey-lighter font-sans pt-8 pr-4 pb-4 pl-4">
+  <div class="sidebar-panel__content">
+    
+    <h1 class="text-2xl font-thin">MuleQuiz Async API 1.0.0</h1>
+    
+    <ul class="text-sm mt-10 list-reset mt-2">
+      <li class="mb-3">
+        <a class="js-menu-item text-grey-darkest no-underline" href="#introduction">Introduction</a>
+      </li>
+      
+      <li class="mb-3">
+        <a class="js-menu-item text-grey-darkest no-underline" href="#servers">Servers</a>
+      </li>
+      
+    </ul>
+    
+    <h2 class="text-xs uppercase text-grey mt-10 mb-4 font-thin">Operations</h2>
+    <ul class="text-sm list-reset mt-2">
+      
+
+      <!--Without tags in sidebar-->
+      
+      <li>
+        
+        <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+          href="#operation-publish-mquiz/{gameId}">
+          <span class="bg-blue-dark font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded"
+            style="height: 21px;font-size: 11px;" title="Publish">Pub</span>
+          
+          <span style="padding-top: 2px;">
+            Send messages, actions to execute on a particular game (eg. start game, messages)
+          </span>
+          
+        </a>
+        
+        
+        <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+          href="#operation-subscribe-mquiz/{gameId}">
+          <span class="bg-green-dark font-bold no-underline text-white uppercase p-1 mr-2 rounded"
+            style="height: 21px;font-size: 11px;" title="Subscribe">Sub</span>
+          
+          <span style="padding-top: 2px;">
+            Receive information of a particular game (eg. game status, messages)
+          </span>
+          
+        </a>
+        
+        </a>
+      </li>
+      
+    </ul>
+    
+    <h2 class="text-xs uppercase text-grey mt-10 mb-4 font-thin">Messages</h2>
+    <ul class="text-sm list-reset mt-2">
+      
+        <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+          href="#message-pubMsg">
+          <div style="display:inline-block;">
+            
+<span class="string-chunk" style="padding-top: 2px;">pubMsg</span>
+
+          </div>
+        </a>
+      
+        <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+          href="#message-subMsg">
+          <div style="display:inline-block;">
+            
+<span class="string-chunk" style="padding-top: 2px;">subMsg</span>
+
+          </div>
+        </a>
+      
+    </ul>
+    
+  </div>
+</div>
+
+    <div class="content-panel flex-1 leading-loose z-10">
+      <div class="center-block p-8">
+  <a name="introduction"></a>
+  <h1>MuleQuiz Async API 1.0.0</h1>
+  <div class="leading-normal mb-4">
+    
+    
+      <a class="border border-solid border-orange-lighter hover:bg-orange-lighter hover:text-orange-dark font-bold no-underline text-orange text-xs uppercase rounded mr-2 px-3 py-1"
+        href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache 2.0</a>
+    
+  </div>
+
+  <div class="markdown">
+    <p>The MuleQuiz Async API allows you to play with your friends / colleagues and improve your knowledge about MuleSoft.</p>
+<h3>Check out its awesome features:</h3>
+<ul>
+<li>Real-time chat while playing 💬</li>
+<li>Async specifications allowing you to easily understand it and develop your own client 📃</li>
+<li>A simple HTML/JS client to test it: <a href="https://api.victorbahl.com/mquiz">link</a> 🌐</li>
+<li>Documentation of the WebSocket implementation with MuleSoft available here: <a href="https://github.com">link</a> 🎉</li>
+</ul>
+
+  </div>
+
+
+  <div class="leading-normal mb-4">
+    
+  </div>
+</div>
+
+
+
+<a name="servers"></a>
+<div class="center-block p-8">
+
+  <h2 class="mb-4">Servers</h2>
+
+  
+    <div class="shadow bg-grey-lighter mb-3 px-4 py-3">
+      <div class="flex">
+        <div>
+          <div class="pr-4 font-mono">
+            
+<span class="string-chunk" >wss://api.victorbahl.com:443</span>
+
+
+            
+            <span class="bg-teal font-sans font-bold no-underline text-white uppercase rounded ml-2"
+              style="height: 20px;font-size: 11px;padding: 3px;">wss</span>
+            
+          </div>
+          <div class="text-xs text-grey-dark">
+            
+          </div>
+        </div>
+      </div>
+
+      
+        <div>
+          
+        </div>
+      
+
+      
+    </div>
+  
+
+</div>
+
+
+
+
+
+<a name="operations"></a>
+<h2 class="mb-4 ml-8">Operations</h2>
+
+
+  <div class="responsive-container">
+    
+      
+
+<a name="operation-publish-mquiz/{gameId}"></a>
+<div class="center-block p-8">
+  <div class="operation pt-8 pb-8">
+    <h3 class="font-mono text-base">
+      
+      <span class="font-mono border border-blue text-blue uppercase p-1 rounded" title="Publish">Pub</span>
+      
+      
+      
+<span class="string-chunk" >mquiz/{gameId}</span>
+
+    </h3>
+
+    <div class="mt-4 mb-4 markdown"><p>The topic on which game events may be produced and consumed.</p>
+</div>
+
+    <p class="text-grey text-sm">Send messages, actions to execute on a particular game (eg. start game, messages)</p>
+    <div class="mt-4 mb-4 markdown"></div>
+
+
+
+    
+    <div class="mt-2">
+        <div class="is-open">
+          <div class="js-prop cursor-pointer py-2 flex property">
+            <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+              <span class="text" style="word-break: break-word;">Parameters</span>
+              <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
+                <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+              </svg>
+            </div>
+          </div>
+          <div class="children bg-grey-lighter p-4 rounded">
+            <div class="bg-grey-lightest pl-8 pr-8 rounded">
+              
+                
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">gameId</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+
+    
+    <p>Accepts the following message:</p>
+    
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    
+      Publish Message
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">pubMsg</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Message that can be sent by a player in a game room (chat message or action)</p>
+  
+  
+
+<div class="mt-4">
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"></div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="is-open">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          oneOf
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          
+          allOf
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>An action message. From the players to the game master.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"chat"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"action"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"status"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sentAt</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">date-time</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Date and time when the message was sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">data</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">action</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          
+          allOf
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A chat message</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"chat"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"action"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"status"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sentAt</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">date-time</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Date and time when the message was sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">data</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">from</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sid</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">nickname</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">text</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rightAnswer</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+boolean
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+
+    
+
+<div class="mt-4">
+  
+</div>
+
+
+
+  </div>
+</div>
+
+<div class="right-block p-8">
+  <h4 class="text-lg text-white mb-4">Examples</h4>
+
+  
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">pubMsg</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "type": "action",
+  "sentAt": "2019-08-24T14:15:22Z",
+  "data": {
+    "action": "start"
+  }
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
+</div>
+
+
+
+    
+  </div>
+  <div class="responsive-container">
+    
+      
+
+<a name="operation-subscribe-mquiz/{gameId}"></a>
+<div class="center-block p-8">
+  <div class="operation pt-8 pb-8">
+    <h3 class="font-mono text-base">
+      
+      
+      <span class="font-mono border border-green-dark text-green-dark uppercase p-1 rounded"
+        title="Subscribe">Sub</span>
+      
+      
+<span class="string-chunk" >mquiz/{gameId}</span>
+
+    </h3>
+
+    <div class="mt-4 mb-4 markdown"><p>The topic on which game events may be produced and consumed.</p>
+</div>
+
+    <p class="text-grey text-sm">Receive information of a particular game (eg. game status, messages)</p>
+    <div class="mt-4 mb-4 markdown"></div>
+
+
+
+    
+    <div class="mt-2">
+        <div class="is-open">
+          <div class="js-prop cursor-pointer py-2 flex property">
+            <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+              <span class="text" style="word-break: break-word;">Parameters</span>
+              <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
+                <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+              </svg>
+            </div>
+          </div>
+          <div class="children bg-grey-lighter p-4 rounded">
+            <div class="bg-grey-lightest pl-8 pr-8 rounded">
+              
+                
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">gameId</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+
+    
+    <p>Accepts the following message:</p>
+    
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    
+      Subscribe Message
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">subMsg</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Message that can be received by a player in a game room (chat message or status)</p>
+  
+  
+
+<div class="mt-4">
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"></div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="is-open">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          oneOf
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          
+          allOf
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A status message. From the game master to the players.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"chat"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"action"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"status"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sentAt</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">date-time</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Date and time when the message was sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">data</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">status</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"toBeStarted"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"started"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"ended"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">mainMessage</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">timeLeft</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">players</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;object&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sid</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">nickname</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">score</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          
+          allOf
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A chat message</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"chat"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"action"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"status"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sentAt</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">date-time</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Date and time when the message was sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">data</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">from</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sid</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">nickname</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">text</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rightAnswer</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+boolean
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+
+    
+
+<div class="mt-4">
+  
+</div>
+
+
+
+  </div>
+</div>
+
+<div class="right-block p-8">
+  <h4 class="text-lg text-white mb-4">Examples</h4>
+
+  
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">subMsg</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "type": "status",
+  "sentAt": "2019-08-24T14:15:22Z",
+  "data": {
+    "status": "toBeStarted",
+    "mainMessage": "The game hasn't started yet, press START to begin!",
+    "players": [
+      {
+        "sid": "znhcp",
+        "nickname": "Victor",
+        "score": 0
+      },
+      {
+        "sid": "tyyty",
+        "nickname": "Clément",
+        "score": 0
+      }
+    ]
+  }
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
+</div>
+
+
+
+    
+  </div>
+
+
+
+
+
+<a name="messages"></a>
+<h2 class="ml-8 mt-4">Messages</h2>
+
+<div class="responsive-container">
+  <div class="center-block p-8">
+    <div class="pb-8">
+      
+      <a name="message-pubMsg"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#1</span>
+    
+    
+      Publish Message
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">pubMsg</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Message that can be sent by a player in a game room (chat message or action)</p>
+  
+  
+
+<div class="mt-4">
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"></div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          oneOf
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          
+          allOf
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>An action message. From the players to the game master.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"chat"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"action"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"status"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sentAt</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">date-time</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Date and time when the message was sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">data</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">action</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          
+          allOf
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A chat message</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"chat"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"action"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"status"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sentAt</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">date-time</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Date and time when the message was sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">data</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">from</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sid</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">nickname</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">text</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rightAnswer</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+boolean
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+      <a name="message-subMsg"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#2</span>
+    
+    
+      Subscribe Message
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">subMsg</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Message that can be received by a player in a game room (chat message or status)</p>
+  
+  
+
+<div class="mt-4">
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"></div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          oneOf
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          
+          allOf
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A status message. From the game master to the players.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"chat"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"action"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"status"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sentAt</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">date-time</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Date and time when the message was sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">data</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">status</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"toBeStarted"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"started"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"ended"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">mainMessage</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">timeLeft</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">players</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;object&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sid</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">nickname</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">score</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+
+          
+          
+          allOf
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A chat message</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"chat"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"action"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"status"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sentAt</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">date-time</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Date and time when the message was sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">data</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">from</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">sid</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">nickname</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">text</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rightAnswer</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+boolean
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+    </div>
+  </div>
+</div>
+
+
+    </div>
+    <div class="examples-panel absolute pin-t pin-r pin-b"></div>
+  </div>
+  <script src="js/highlight.min.js" type="application/javascript"></script>
+  <script src="js/main.js" type="application/javascript"></script>
+</body>
+</html>

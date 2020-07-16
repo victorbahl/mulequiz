@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:mule="http://www.mulesoft.org/schema/mule/core" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mulesoft.org/schema/mule/kafka" attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace"></xs:import>
+  <xs:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans.xsd"></xs:import>
+  <xs:import namespace="http://www.mulesoft.org/schema/mule/core" schemaLocation="http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></xs:import>
+  <xs:import namespace="http://www.mulesoft.org/schema/mule/tls" schemaLocation="http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd"></xs:import>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstract-shared-extension" name="consumer-config">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractExtensionType">
+          <xs:sequence minOccurs="1" maxOccurs="1">
+            <xs:element minOccurs="1" maxOccurs="1" ref="mule:abstractConnectionProvider"></xs:element>
+          </xs:sequence>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="com.mulesoft.connectors.kafka.api.source.AckModeEnumType" use="optional" default="AUTO" name="ackMode">
+            <xs:annotation>
+              <xs:documentation>Defines the way that the Kafka Broker instance is notified of the consumption of messages. AUTO: Messages are committed only if the flow is finished successfully. MANUAL: The user must commit manually through the Commit operation. IMMEDIATE: Mule automatically commits the messages upon reception and before triggering the flow. DUPS_OK: Same as the MANUAL mode, but the commit is made asynchronously, which can lead to duplicate records.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="100" name="pollTimeout">
+            <xs:annotation>
+              <xs:documentation>The time, in time units, spent waiting to do a poll if data is not available in the buffer (fetched). If no value is set, returns immediately with any records that are available currently in the buffer, else returns empty. Must not be negative.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="MILLISECONDS" name="pollTimeoutTimeUnit">
+            <xs:annotation>
+              <xs:documentation>The time unit for the polling timeout. This combines with pollTimeout to define the total timeout for the polling.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="-1" name="operationTimeout">
+            <xs:annotation>
+              <xs:documentation>The time, in time units, spent waiting for an operation to finish. If no value is set or a negative value is set, the operation will wait forever. Must not be negative.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="operationTimeoutTimeUnit">
+            <xs:annotation>
+              <xs:documentation>The time unit for the operation timeout. This combines with operationTimeout to define the total default timeout for the operations that use this config.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:string" use="optional" name="zoneId">
+            <xs:annotation>
+              <xs:documentation>Zone ID used to convert the provided timestamps into ZonedLocalDateTimes in the results. Default value is the system one.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:string" use="required" name="name">
+            <xs:annotation>
+              <xs:documentation>The identifier of this element used to reference it in other components</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstractConnectionProvider" name="consumer-plaintext-connection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractConnectionProviderType">
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:reconnection"></xs:element>
+            <xs:element xmlns:tls="http://www.mulesoft.org/schema/mule/tls" minOccurs="0" maxOccurs="1" ref="tls:context"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="bootstrap-servers">
+              <xs:annotation>
+                <xs:documentation>The list of servers to bootstrap the connection with the kafka cluster. This can be a partial list of the available servers.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="bootstrap-server">
+                    <xs:complexType>
+                      <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="topic-patterns">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="topic-pattern">
+                    <xs:complexType>
+                      <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="assignments">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element xmlns:kafka="http://www.mulesoft.org/schema/mule/kafka" minOccurs="0" maxOccurs="unbounded" ref="kafka:abstract-topic-partition"></xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:string" use="optional" name="tlsContext"></xs:attribute>
+          <xs:attribute type="mule:substitutableName" use="optional" name="bootstrapServers">
+            <xs:annotation>
+              <xs:documentation>The list of servers to bootstrap the connection with the kafka cluster. This can be a partial list of the available servers.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:string" use="optional" name="groupId">
+            <xs:annotation>
+              <xs:documentation>TODO: What should the default value for this be? config name? Default Group ID for all the Kafka Consumers that use this configuration.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="1" name="consumerAmount">
+            <xs:annotation>
+              <xs:documentation>Determines the number of consumers the connection will initially create.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableLong" use="optional" default="300" name="maximumPollingInterval">
+            <xs:annotation>
+              <xs:documentation>The configuration controls the maximum amount of time the client will wait for the response of a request. If the response is not received before the timeout elapses the client will resend the request if necessary or fail the request if retries are exhausted. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="maximumPollingIntervalTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for request timeout scalar. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="com.mulesoft.connectors.kafka.api.params.enums.IsolationLevelEnumType" use="optional" default="READ_UNCOMMITTED" name="isolationLevel">
+            <xs:annotation>
+              <xs:documentation>Controls how to read messages written transactionally. If set to &lt;code&gt;read_committed&lt;/code&gt;, consumer.poll() will only return" + " transactional messages which have been committed. If set to &lt;code&gt;read_uncommitted&lt;/code&gt;' (the default), consumer.poll() will return all messages, even transactional messages" + " which have been aborted. Non-transactional messages will be returned unconditionally in either mode.&lt;/p&gt; &lt;p&gt;Messages will always be returned in offset order. Hence, in " + " &lt;code&gt;read_committed&lt;/code&gt; mode, consumer.poll() will only return messages up to the last stable offset (LSO), which is the one less than the offset of the first open transaction." + " In particular any messages appearing after messages belonging to ongoing transactions will be withheld until the relevant transaction has been completed. As a result, &lt;code&gt;read_committed&lt;/code&gt;" + " consumers will not be able to read up to the high watermark when there are in flight transactions.&lt;/p&gt;&lt;p&gt; Further, when in &lt;code&gt;read_committed&lt;/code&gt; the seekToEnd method will" + " return the LSO</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableBoolean" use="optional" default="true" name="excludeInternalTopics">
+            <xs:annotation>
+              <xs:documentation>Whether internal topics matching a subscribed pattern should be excluded from the subscription. It is always possible to explicitly subscribe to an internal topic.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="com.mulesoft.connectors.kafka.api.params.enums.AutoOffsetResetEnumType" use="optional" default="LATEST" name="autoOffsetReset">
+            <xs:annotation>
+              <xs:documentation>What to do when there is no initial offset in Kafka or if the current offset does not exist any more on the server (e.g. because that data has been deleted): EARLIEST: automatically reset the offset to the earliest offset. LATEST: automatically reset the offset to the latest offset. ERROR: throw error to the if no previous offset is found for the consumer's group.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableLong" use="optional" default="100" name="retryBackoffTimeout">
+            <xs:annotation>
+              <xs:documentation>The amount of time to wait before attempting to retry a failed request to a given topic partition. This avoids repeatedly sending requests in a tight loop under some failure scenarios.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="MILLISECONDS" name="retryBackoffTimeoutTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for the reconnect backoff timeout scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableBoolean" use="optional" default="true" name="enableCRCCheck">
+            <xs:annotation>
+              <xs:documentation>Automatically check the CRC32 of the records consumed. This ensures no on-the-wire or on-disk corruption to the messages occurred. This check adds some overhead, so it may be disabled in cases seeking extreme performance.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="64" name="receiveBufferSize">
+            <xs:annotation>
+              <xs:documentation>The size of the TCP receive buffer (SO_RCVBUF) to use when reading data. If the value is -1, the OS default will be used. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="org.mule.runtime.api.util.DataUnitEnumType" use="optional" default="KB" name="receiveBufferSizeUnit">
+            <xs:annotation>
+              <xs:documentation>The unit of measure for the receive buffer size scalar. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="128" name="sendBufferSize">
+            <xs:annotation>
+              <xs:documentation>The size of the TCP send buffer (SO_SNDBUF) to use when sending data. If the value is -1, the OS default will be used. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="org.mule.runtime.api.util.DataUnitEnumType" use="optional" default="KB" name="sendBufferSizeUnit">
+            <xs:annotation>
+              <xs:documentation>The unit of measure for the send buffer size scalar. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableLong" use="optional" default="30" name="requestTimeout">
+            <xs:annotation>
+              <xs:documentation>The configuration controls the maximum amount of time the client will wait for the response of a request. If the response is not received before the timeout elapses the client will resend the request if necessary or fail the request if retries are exhausted. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="requestTimeoutTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for request timeout scalar. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="500" name="recordLimit">
+            <xs:annotation>
+              <xs:documentation>The maximum number of records returned on a poll call to the Kafka cluster. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="com.mulesoft.connectors.kafka.api.params.enums.ClientDNSLookupEnumType" use="optional" default="DEFAULT" name="clientDNSLookup">
+            <xs:annotation>
+              <xs:documentation>Controls how the client uses DNS lookups. If set to use_all_dns_ips then, when the lookup returns multiple IP addresses for a hostname, they will all be attempted to connect to before failing the connection. Applies to both bootstrap and advertised servers. If the value is resolve_canonical_bootstrap_servers_only each entry will be resolved and expanded into a list of canonical names.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="3" name="heartbeatInterval">
+            <xs:annotation>
+              <xs:documentation>The expected time between heartbeats to the consumer coordinator when using Kafka's group management facilities. Heartbeats are used to ensure that the consumer's session stays active and to facilitate rebalancing when new consumers join or leave the group. The value must be set lower than session.timeout.ms, but typically should be set no higher than 1/3 of that value. It can be adjusted even lower to control the expected time for normal rebalances.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="heartbeatIntervalTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for fetch heartbeat interval time scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="10" name="sessionTimeout">
+            <xs:annotation>
+              <xs:documentation>The timeout used to detect consumer failures when using Kafka's group management facility. The consumer sends periodic heartbeats to indicate its liveness to the broker. If no heartbeats are received by the broker before the expiration of this session timeout, then the broker will remove this consumer from the group and initiate a rebalance. Note that the value must be in the allowable range as configured in the broker configuration by group.min.session.timeout.ms and group.max.session.timeout.ms.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="sessionTimeoutTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for session timeout scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="540" name="connectionsMaximumIdleTime">
+            <xs:annotation>
+              <xs:documentation>Close idle connections after the number of milliseconds specified by this config.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="connectionsMaximumIdleTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for connections maximum idle time scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableName" use="optional" name="topicPatterns"></xs:attribute>
+          <xs:attribute type="mule:substitutableName" use="optional" name="assignments"></xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="1" name="fetchMinimumSize">
+            <xs:annotation>
+              <xs:documentation>The minimum amount of data the server should return for a fetch request. If insufficient data is available the request will wait for that much data to accumulate before answering the request. The default setting of 1 byte means that fetch requests are answered as soon as a single byte of data is available or the fetch request times out waiting for data to arrive. Setting this to something greater than 1 will cause the server to wait for larger amounts of data to accumulate which can improve server throughput a bit at the cost of some additional latency. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="org.mule.runtime.api.util.DataUnitEnumType" use="optional" default="BYTE" name="fetchMinimumSizeUnit"></xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="1" name="fetchMaximumSize">
+            <xs:annotation>
+              <xs:documentation>The maximum amount of data the server should return for a fetch request. Records are fetched in batches by the consumer, and if the first record batch in the first non-empty partition of the fetch is larger than this value, the record batch will still be returned to ensure that the consumer can make progress. As such, this is not an absolute maximum. The maximum record batch size accepted by the broker is defined via message.max.bytes (broker config) or max.message.bytes (topic config). Note that the consumer performs multiple fetches in parallel. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="org.mule.runtime.api.util.DataUnitEnumType" use="optional" default="MB" name="fetchMaximumSizeUnit">
+            <xs:annotation>
+              <xs:documentation>The unit of measure for the maximum partition fetch size scalar. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="1" name="maximumPartitionFetchSize">
+            <xs:annotation>
+              <xs:documentation>The maximum amount of data per-partition the server will return. Records are fetched in batches by the consumer. If the first record batch in the first non-empty partition of the fetch is larger than this limit, the batch will still be returned to ensure that the consumer can make progress. The maximum record batch size accepted by the broker is defined via message.max.bytes (broker config) or max.message.bytes (topic config). See fetch.max.bytes for limiting the consumer request size.This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="org.mule.runtime.api.util.DataUnitEnumType" use="optional" default="MB" name="maximumPartitionFetchSizeUnit">
+            <xs:annotation>
+              <xs:documentation>The unit of measure for the maximum partition fetch size scalar. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="500" name="fetchMaximumWaitTimeout">
+            <xs:annotation>
+              <xs:documentation>The maximum amount of time the server will block before answering the fetch request if there isn't sufficient data to immediately satisfy the requirement given by fetch.min.bytes.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="MILLISECONDS" name="fetchMaximumWaitTimeoutUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for fetch maximum wait timeout scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="com.mulesoft.connectors.kafka.api.source.TopicPartition">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractExtensionType">
+        <xs:attribute type="mule:expressionString" use="required" name="topic"></xs:attribute>
+        <xs:attribute type="mule:expressionInt" use="required" name="partition"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:kafka="http://www.mulesoft.org/schema/mule/kafka" type="kafka:com.mulesoft.connectors.kafka.api.source.TopicPartition" abstract="true" name="abstract-topic-partition"></xs:element>
+  <xs:element xmlns:kafka="http://www.mulesoft.org/schema/mule/kafka" substitutionGroup="kafka:abstract-topic-partition" name="topic-partition">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="kafka:com.mulesoft.connectors.kafka.api.source.TopicPartition"></xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/kafka" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="Batch-message-listenerType" substitutionGroup="mule:abstract-message-source" name="batch-message-listener">
+    <xs:annotation>
+      <xs:documentation>This source supports the consumption of messages from a Kafka Cluster, producing a List of messages to the flow.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="Batch-message-listenerType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractMessageSourceType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-redelivery-policy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:substitutableInt" use="optional" name="pollTimeout">
+          <xs:annotation>
+            <xs:documentation>TODO :Add docs.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" name="pollTimeoutTimeUnit">
+          <xs:annotation>
+            <xs:documentation>TODO :Add docs.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="com.mulesoft.connectors.kafka.api.source.AckModeEnumType" use="optional" name="ackMode">
+          <xs:annotation>
+            <xs:documentation>TODO :Add docs.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:substitutableInt" use="optional" default="1" name="parallelConsumersAmount"></xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:substitutableBoolean" use="optional" name="primaryNodeOnly">
+          <xs:annotation>
+            <xs:documentation>Whether this source should only be executed on the primary node when runnning in Cluster</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/kafka" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="Message-listenerType" substitutionGroup="mule:abstract-message-source" name="message-listener">
+    <xs:annotation>
+      <xs:documentation>This source supports the consumption of messages from a Kafka Cluster, producing a single message to the flow.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="Message-listenerType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractMessageSourceType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-redelivery-policy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-byte-streaming-strategy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:substitutableInt" use="optional" name="pollTimeout">
+          <xs:annotation>
+            <xs:documentation>TODO :Add docs.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" name="pollTimeoutTimeUnit">
+          <xs:annotation>
+            <xs:documentation>TODO :Add docs.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="com.mulesoft.connectors.kafka.api.source.AckModeEnumType" use="optional" name="ackMode">
+          <xs:annotation>
+            <xs:documentation>TODO :Add docs.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:substitutableInt" use="optional" default="1" name="parallelConsumersAmount"></xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:substitutableBoolean" use="optional" name="primaryNodeOnly">
+          <xs:annotation>
+            <xs:documentation>Whether this source should only be executed on the primary node when runnning in Cluster</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/kafka" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="CommitType" substitutionGroup="mule:abstract-operator" name="commit">
+    <xs:annotation>
+      <xs:documentation>Commits the offsets associated to a message or batch of messages consumed in a Message Listener. This would be a List or a single message consumed in the BatchMessageListenerSource</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="CommitType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="required" name="commitKey">
+          <xs:annotation>
+            <xs:documentation>The commitKey of the last poll. This operation is only valid when used inside a flow that is using on of the MessageListenerSource(s) ( BatchMessageListenerSource / BatchMessageListenerSource) which insert this value as an attribute in the Mule Event</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/kafka" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="ConsumeType" substitutionGroup="mule:abstract-operator" name="consume">
+    <xs:annotation>
+      <xs:documentation>This operation allows receiving messages from one or more Kafka topics, it works very similarly to the Message Listener source, so all the operations that apply to that, will apply to this operation as well.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="ConsumeType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-byte-streaming-strategy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionInt" use="optional" name="pollTimeout">
+          <xs:annotation>
+            <xs:documentation>The amount of TimeUnits that this operation will wait for receiving messages.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" name="pollTimeoutTimeUnit">
+          <xs:annotation>
+            <xs:documentation>The unit of time for the timeout property.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionInt" use="optional" name="operationTimeout"></xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" name="operationTimeoutTimeUnit"></xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="optional" name="target">
+          <xs:annotation>
+            <xs:documentation>The name of a variable on which the operation's output will be placed</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" default="#[payload]" name="targetValue">
+          <xs:annotation>
+            <xs:documentation>An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/kafka" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="SeekType" substitutionGroup="mule:abstract-operator" name="seek">
+    <xs:annotation>
+      <xs:documentation>Sets the current offset of the consumer for the given topic and partition to the provided offset value.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="SeekType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="required" name="topic">
+          <xs:annotation>
+            <xs:documentation>The name of the topic on which the seek operation will be performed.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionInt" use="required" name="partition">
+          <xs:annotation>
+            <xs:documentation>The partition number that will have its offset modified.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionLong" use="required" name="offset">
+          <xs:annotation>
+            <xs:documentation>The offset value to commit for the configured partition.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionInt" use="optional" name="operationTimeout"></xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" name="operationTimeoutTimeUnit"></xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstract-shared-extension" name="producer-config">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractExtensionType">
+          <xs:sequence minOccurs="1" maxOccurs="1">
+            <xs:element minOccurs="1" maxOccurs="1" ref="mule:abstractConnectionProvider"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:expiration-policy"></xs:element>
+          </xs:sequence>
+          <xs:attribute type="mule:expressionString" use="optional" default="defaultTopicName" name="topic">
+            <xs:annotation>
+              <xs:documentation>A default topic name to be used by the producer operations, overridable at operation config level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="zoneId">
+            <xs:annotation>
+              <xs:documentation>TODO: Add comments.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:string" use="required" name="name">
+            <xs:annotation>
+              <xs:documentation>The identifier of this element used to reference it in other components</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstractConnectionProvider" name="producer-plaintext-connection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractConnectionProviderType">
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:reconnection"></xs:element>
+            <xs:element xmlns:tls="http://www.mulesoft.org/schema/mule/tls" minOccurs="0" maxOccurs="1" ref="tls:context"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="bootstrap-servers">
+              <xs:annotation>
+                <xs:documentation>The list of servers to bootstrap the connection with the kafka cluster. This can be a partial list of the available servers.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element minOccurs="0" maxOccurs="unbounded" name="bootstrap-server">
+                    <xs:complexType>
+                      <xs:attribute type="mule:expressionString" use="required" name="value"></xs:attribute>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:string" use="optional" name="tlsContext"></xs:attribute>
+          <xs:attribute type="mule:substitutableName" use="optional" name="bootstrapServers">
+            <xs:annotation>
+              <xs:documentation>The list of servers to bootstrap the connection with the kafka cluster. This can be a partial list of the available servers.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="16" name="batchSize">
+            <xs:annotation>
+              <xs:documentation>The producer will attempt to batch records together into fewer requests whenever multiple records are being sent to the same partition. This helps performance on both the client and the server. This configuration controls the default batch size in bytes. No attempt will be made to batch records larger than this size. Requests sent to brokers will contain multiple batches, one for each partition with data available to be sent. A small batch size will make batching less common and may reduce throughput (a batch size of zero will disable batching entirely). A very large batch size may use memory a bit more wastefully as we will always allocate a buffer of the specified batch size in anticipation of additional records.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="org.mule.runtime.api.util.DataUnitEnumType" use="optional" default="KB" name="batchSizeUnit">
+            <xs:annotation>
+              <xs:documentation>The unit of measure for the batch size scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="1000" name="bufferSize">
+            <xs:annotation>
+              <xs:documentation>The total bytes of memory the producer can use to buffer records waiting to be sent to the server. If records are sent faster than they can be delivered to the server the producer will block for max.block.ms after which it will throw an exception. This setting should correspond roughly to the total memory the producer will use, but is not a hard bound since not all memory the producer uses is used for buffering. Some additional memory will be used for compression (if compression is enabled) as well as for maintaining in-flight requests. The default value in the Kafka docs is of 33554432 (32MB), but this should be capped to align with expected values for mule instances in cloudhub (v0.1 core)</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="org.mule.runtime.api.util.DataUnitEnumType" use="optional" default="KB" name="bufferSizeUnit">
+            <xs:annotation>
+              <xs:documentation>The unit of measure for the max request size scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="com.mulesoft.connectors.kafka.api.params.enums.ClientDNSLookupEnumType" use="optional" default="DEFAULT" name="clientDNSLookup">
+            <xs:annotation>
+              <xs:documentation>Controls how the client uses DNS lookups. If set to use_all_dns_ips then, when the lookup returns multiple IP addresses for a hostname, they will all be attempted to connect to before failing the connection. Applies to both bootstrap and advertised servers. If the value is resolve_canonical_bootstrap_servers_only each entry will be resolved and expanded into a list of canonical names.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="com.mulesoft.connectors.kafka.api.params.enums.CompressionTypeEnumType" use="optional" default="NONE" name="compressionType">
+            <xs:annotation>
+              <xs:documentation>The compression type for all data generated by the producer. The default is none (i.e. no compression). Valid values are none, gzip, snappy, lz4, or zstd. Compression is of full batches of data, so the efficacy of batching will also impact the compression ratio (more batching means better compression).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="540" name="connectionsMaximumIdleTimeout">
+            <xs:annotation>
+              <xs:documentation>Close idle connections after the value specified by this config.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="connectionsMaximumIdleTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for the connections maximum idle scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="120" name="deliveryTimeout">
+            <xs:annotation>
+              <xs:documentation>An upper bound on the time to report success or failure after a call to send() returns. This limits the total time that a record will be delayed prior to sending, the time to await acknowledgement from the broker (if expected), and the time allowed for retriable send failures. The producer may report failure to send a record earlier than this config if either an unrecoverable error is encountered, the retries have been exhausted, or the record is added to a batch which reached an earlier delivery expiration deadline. The value of this config should be greater than or equal to the sum of request.timeout.ms and linger.ms.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="deliveryTimeoutTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for the delivery timeout scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableBoolean" use="optional" default="false" name="idempotence">
+            <xs:annotation>
+              <xs:documentation>When set to 'true', the producer will ensure that exactly one copy of each message is written in the stream. If 'false', producer retries due to broker failures, etc, may write duplicates of the retried message in the stream. Note that enabling idempotence requires max.in.flight.requests.per.connection to be less than or equal to 5, retries to be greater than 0 and acks must be 'all'. If these values are not explicitly set by the user, suitable values will be chosen. If incompatible values are set, a ConnectionException will be thrown</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="0" name="lingerTime">
+            <xs:annotation>
+              <xs:documentation>The producer groups together any records that arrive in between request transmissions into a single batched request. Normally this occurs only under load when records arrive faster than they can be sent out. However in some circumstances the client may want to reduce the number of requests even under moderate load. This setting accomplishes this by adding a small amount of artificial delay?that is, rather than immediately sending out a record the producer will wait for up to the given delay to allow other records to be sent so that the sends can be batched together. This can be thought of as analogous to Nagle's algorithm in TCP. This setting gives the upper bound on the delay for batching: once we get batch.size worth of records for a partition it will be sent immediately regardless of this setting, however if we have fewer than this many bytes accumulated for this partition we will 'linger' for the specified time waiting for more records to show up. This setting defaults to 0 (i.e. no delay). Setting linger.ms=5, for example, would have the effect of reducing the number of requests sent but would add up to 5ms of latency to records sent in the absence of load.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="lingerTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for the linger time scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="60" name="maximumBlockTime">
+            <xs:annotation>
+              <xs:documentation>The configuration controls how long KafkaProducer.send() and KafkaProducer.partitionsFor() will block.These methods can be blocked either because the buffer is full or metadata unavailable.Blocking in the user-supplied serializers or partitioner will not be counted against this timeout.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="maximumBlockTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for the maximum block time scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="5" name="maximumInFlightRequests">
+            <xs:annotation>
+              <xs:documentation>The maximum number of unacknowledged requests the client will send on a single connection before blocking. Note that if this setting is set to be greater than 1 and there are failed sends, there is a risk of message re-ordering due to retries (i.e., if retries are enabled).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="1" name="maximumRequestSize">
+            <xs:annotation>
+              <xs:documentation>The maximum size of a request in bytes. This setting will limit the number of record batches the producer will send in a single request to avoid sending huge requests. This is also effectively a cap on the maximum record batch size. Note that the server has its own cap on record batch size which may be different from this.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="org.mule.runtime.api.util.DataUnitEnumType" use="optional" default="MB" name="maximumRequestSizeUnit">
+            <xs:annotation>
+              <xs:documentation>The unit of measure for the max request size scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="com.mulesoft.connectors.kafka.api.params.enums.ProducerAckEnumType" use="optional" default="NONE" name="producerAck">
+            <xs:annotation>
+              <xs:documentation>The number of acknowledgments the producer requires the leader to have received before considering a request complete. This controls the durability of records that are sent</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="64" name="receiveBufferSize">
+            <xs:annotation>
+              <xs:documentation>The size of the TCP receive buffer (SO_RCVBUF) to use when reading data. If the value is -1, the OS default will be used. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="org.mule.runtime.api.util.DataUnitEnumType" use="optional" default="KB" name="receiveBufferSizeUnit">
+            <xs:annotation>
+              <xs:documentation>The unit of measure for the receive buffer size scalar. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="1" name="retries">
+            <xs:annotation>
+              <xs:documentation>Setting a value greater than zero will cause the client to resend any record whose send fails with a potentially transient error. Note that this retry is no different than if the client resent the record upon receiving the error. Allowing retries without setting max.in.flight.requests.per.connection to 1 will potentially change the ordering of records because if two batches are sent to a single partition, and the first fails and is retried but the second succeeds, then the records in the second batch may appear first. Note additionally that produce requests will be failed before the number of retries has been exhausted if the timeout configured by delivery.timeout.ms expires first before successful acknowledgement. Users should generally prefer to leave this config unset and instead use delivery.timeout.ms to control retry behavior.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableLong" use="optional" default="100" name="retryBackoffTimeout">
+            <xs:annotation>
+              <xs:documentation>The amount of time to wait before attempting to retry a failed request to a given topic partition. This avoids repeatedly sending requests in a tight loop under some failure scenarios.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="MILLISECONDS" name="retryBackoffTimeoutTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for the retry backoff timeout time scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="128" name="sendBufferSize">
+            <xs:annotation>
+              <xs:documentation>The size of the TCP send buffer (SO_SNDBUF) to use when sending data. If the value is -1, the OS default will be used. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="org.mule.runtime.api.util.DataUnitEnumType" use="optional" default="KB" name="sendBufferSizeUnit">
+            <xs:annotation>
+              <xs:documentation>The unit of measure for the send buffer size scalar. This parameter can be overridden at source level.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableInt" use="optional" default="30" name="requestTimeout">
+            <xs:annotation>
+              <xs:documentation>The configuration controls the maximum amount of time the client will wait for the response of a request. If the response is not received before the timeout elapses the client will resend the request if necessary or fail the request if retries are exhausted. This should be larger than replica.lag.time.max.ms (a broker configuration) to reduce the possibility of message duplication due to unnecessary producer retries.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/kafka" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="requestTimeoutTimeUnit">
+            <xs:annotation>
+              <xs:documentation>Determines the time unit for the request timeout time scalar.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/kafka" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="PublishType" substitutionGroup="mule:abstract-operator" name="publish">
+    <xs:annotation>
+      <xs:documentation>Publish a message to the specified kafka topic, optionally specifying the partition, key and message content for it. The publish operation supports transactions.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="PublishType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+          <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="message">
+            <xs:annotation>
+              <xs:documentation>Optional message content of the message</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="headers">
+            <xs:annotation>
+              <xs:documentation>Optional headers for the message</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="optional" name="topic">
+          <xs:annotation>
+            <xs:documentation>The topic to publish to</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionInt" use="optional" name="partition">
+          <xs:annotation>
+            <xs:documentation>Optional The partition tof</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="optional" name="key">
+          <xs:annotation>
+            <xs:documentation>Optional key for the published message</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:operationTransactionalActionType" use="optional" default="JOIN_IF_POSSIBLE" name="transactionalAction">
+          <xs:annotation>
+            <xs:documentation>The type of joining action that operations can take regarding transactions.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="optional" name="target">
+          <xs:annotation>
+            <xs:documentation>The name of a variable on which the operation's output will be placed</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionString" use="optional" default="#[payload]" name="targetValue">
+          <xs:annotation>
+            <xs:documentation>An expression that will be evaluated against the operation's output and the outcome of that expression will be stored in the target variable</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="com.mulesoft.connectors.kafka.api.source.AckModeEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="AUTO"></xs:enumeration>
+          <xs:enumeration value="MANUAL"></xs:enumeration>
+          <xs:enumeration value="IMMEDIATE"></xs:enumeration>
+          <xs:enumeration value="DUPS_OK"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="java.util.concurrent.TimeUnitEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NANOSECONDS"></xs:enumeration>
+          <xs:enumeration value="MICROSECONDS"></xs:enumeration>
+          <xs:enumeration value="MILLISECONDS"></xs:enumeration>
+          <xs:enumeration value="SECONDS"></xs:enumeration>
+          <xs:enumeration value="MINUTES"></xs:enumeration>
+          <xs:enumeration value="HOURS"></xs:enumeration>
+          <xs:enumeration value="DAYS"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="com.mulesoft.connectors.kafka.api.params.enums.IsolationLevelEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="READ_UNCOMMITTED"></xs:enumeration>
+          <xs:enumeration value="READ_COMMITTED"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="com.mulesoft.connectors.kafka.api.params.enums.AutoOffsetResetEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="EARLIEST"></xs:enumeration>
+          <xs:enumeration value="LATEST"></xs:enumeration>
+          <xs:enumeration value="ERROR"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="org.mule.runtime.api.util.DataUnitEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="BYTE"></xs:enumeration>
+          <xs:enumeration value="KB"></xs:enumeration>
+          <xs:enumeration value="MB"></xs:enumeration>
+          <xs:enumeration value="GB"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="com.mulesoft.connectors.kafka.api.params.enums.ClientDNSLookupEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="DEFAULT"></xs:enumeration>
+          <xs:enumeration value="USE_ALL_DNS_IPS"></xs:enumeration>
+          <xs:enumeration value="RESOLVE_CANONICAL_BOOTSTRAP_SERVERS_ONLY"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="com.mulesoft.connectors.kafka.api.params.enums.CompressionTypeEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NONE"></xs:enumeration>
+          <xs:enumeration value="GZIP"></xs:enumeration>
+          <xs:enumeration value="SNAPPY"></xs:enumeration>
+          <xs:enumeration value="LZ4"></xs:enumeration>
+          <xs:enumeration value="ZSTD"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="com.mulesoft.connectors.kafka.api.params.enums.ProducerAckEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NONE"></xs:enumeration>
+          <xs:enumeration value="LEADER_ONLY"></xs:enumeration>
+          <xs:enumeration value="ALL"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+</xs:schema>

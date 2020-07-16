@@ -1,0 +1,12 @@
+{
+    "type": "chat",
+    "data": {
+      "from": {
+        "sid": "znhcp",
+        "nickname": "Victor"
+      },
+      "text": "Hello World!",
+      "rightAnswer": false
+    },
+    "sentAt": "2020-07-21T17:32:28.000Z"
+}
