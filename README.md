@@ -29,7 +29,7 @@ This project is deployed on CloudHub and could be tested via this url: https://a
 
 In order to have your own dynamic questions, you must:
 - Create a database and a quiz table (script available in `other/quiz.sql`)
-- Set the dynamicQuestions in `common-config.yaml` setting to true
+- Set the dynamicQuestions setting in `common-config.yaml` to true
 - Set the DB settings (and the DB connector if you aren't using PostgreSQL)
 
 ## Contributing
