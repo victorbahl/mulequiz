@@ -3,7 +3,13 @@ settings:
   nbOfQuestions: "5"
   textToBeStarted: "The game hasn't started yet, press START to begin! You can also just chat ;)"
   textEnded: "Press START to begin a new round."
-  
+  dynamicQuestions: "false"
+
+keystore:
+  alias: ""
+  keyPassword: ""
+  password: ""
+
 quizDb:
   host: ""
   port: ""

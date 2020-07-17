@@ -14,7 +14,7 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 		<http:listener-connection host="0.0.0.0" port="${https.private.port}" protocol="HTTPS" tlsContext="TLS_Context"/>
 	</http:listener-config>
 	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="2441e24c-5ddb-4cc4-a847-3a98628ddf42" >
-		<tls:key-store path="other/spserver.jks" alias="spserverkey" keyPassword="StupidPen!" password="StupidPen!" />
+		<tls:key-store path="other/keystore.jks" alias="${keystore.alias}" password="${keystore.password}" keyPassword="${keystore.keyPassword}"/>
 	</tls:context>
 	<os:object-store name="OS_Game" doc:name="Object store" doc:id="2c12a884-c28f-49fd-ab60-573ac3f3d243" entryTtl="1" entryTtlUnit="DAYS"/>
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="afbc4742-0473-461a-bce8-5e2edb62dc17" >

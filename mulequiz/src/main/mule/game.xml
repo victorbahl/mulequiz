@@ -241,9 +241,44 @@ vars.game update {
 		<flow-ref doc:name="sendStatus" doc:id="d3c722a9-4616-41ec-8b6d-59a72df69ee7" name="sendStatus" />
 	</flow>
 	<flow name="getQuestions" doc:id="ad495f98-c28c-48a2-be9e-b72ec9336e58">
-		<db:select doc:name="qestions / answers" doc:id="f9a58045-60d3-4473-8f6e-ae586a499d14" config-ref="Database_Config">
+		<choice doc:name="Choice" doc:id="bb726843-ceb8-4878-8a27-25314b46c007" >
+			<when expression="${settings.dynamicQuestions}">
+				<db:select doc:name="dynamic Q/A" doc:id="f9a58045-60d3-4473-8f6e-ae586a499d14" config-ref="Database_Config">
 			<db:sql><![CDATA[SELECT question, answer FROM quiz ORDER BY random() LIMIT ${settings.nbOfQuestions}]]></db:sql>
 		</db:select>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="static Q/A" doc:id="39f5b4ba-fb7d-41bc-b356-08febdeb9901" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    "question": "In what file does the Mule project keep track of all of its dependencies?",
+    "answer": "pom.xml"
+  },
+  {
+    "question": "Complete the sentence: *** *** is a container service that automates the deployment and orchestration of Mule applications and API gateways.",
+    "answer": "Runtime Fabric"
+  },
+  {
+    "question": "Complete the sentence: Mule works by responding to events (such as the receipt of a message) that are initiated by external resources. This follows the concept of *** *** ***.",
+    "answer": "Event Driven Architecture"
+  },
+  {
+    "question": "API development lifecycle - Where do you design APIs (API Spec)?",
+    "answer": "API Designer"
+  },
+  {
+    "question": "Complete the sentence: ***  is the MuleSoft expression language for accessing and transforming data that travels through a Mule app.",
+    "answer": "DataWeave"
+  }
+]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
 		<ee:transform doc:name="to Spec" doc:id="cdeebcfc-159b-4ab4-a572-226c97478d09">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0

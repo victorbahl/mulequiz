@@ -7,7 +7,7 @@ info:
     This AsyncAPI specification allows you to develop your own client.
     
     ### How to test it:
-    * Use a WebSocket client (such as [Simple WebSocket Client](https://chrome.google.com/webstore/detail/simple-websocket-client/pfdhoblngboilpfeibdedpjgfnlcodoo) or even [Websocket.org](https://www.websocket.org/echo.html))
+    * Use a WebSocket client (such as [wscat](https://github.com/websockets/wscat), [Simple WebSocket Client](https://chrome.google.com/webstore/detail/simple-websocket-client/pfdhoblngboilpfeibdedpjgfnlcodoo) or even [Websocket.org](https://www.websocket.org/echo.html))
     * Connect to the WebSocket of the demo room: *wss://api.victorbahl.com:443/mquiz/demo*
     * Use the simple MuleQuiz web client to interact: [https://api.victorbahl.com/mquiz/demo](https://api.victorbahl.com/mquiz/demo)
     * Send messages, start the game, play and see the raw messages (JSON) in your WebSocket client 🎉
