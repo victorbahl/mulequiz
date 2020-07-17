@@ -51,4 +51,4 @@ velocity.log
 # Project-specific #
 # ---------------- #
 common-config.yaml
-spserver.jks
+*.jks
