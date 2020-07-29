@@ -7,6 +7,21 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<flow name="listOS" doc:id="5a9eb556-e953-4488-9f35-8a8fa25ea519" >
+		<http:listener doc:name="/listOS" doc:id="6d9e542b-4ead-4588-b7df-ce905ba2827d" config-ref="HTTPS_Listener_config" path="/listOS"/>
+		<os:retrieve-all doc:name="Retrieve all" doc:id="8b066dd5-a266-46f7-893b-0ebeba0573eb" objectStore="OS_Game"/>
+		<ee:transform doc:name="Transform Message" doc:id="bb416fa2-ac86-4cd8-9e14-48b9b08669d0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload mapObject (v,k,i) -> {
+	(k) : read(v,"application/json")
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
 	<flow name="clearEndedGame" doc:id="f3ff54bb-028a-4088-9a14-f2a6546f4db8" >
 		<scheduler doc:name="At 02:00" doc:id="6bcc4a18-2452-42ec-8faf-81ecacf58658">
 			<scheduling-strategy>

@@ -17,12 +17,12 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 				<flow-ref doc:name="chatMessage" doc:id="56b6e185-022c-4658-8432-e6b2ac34f74c" name="chatMessage"/>
 			</when>
 			<otherwise >
-				<raise-error doc:name="Raise error" doc:id="9dd24c2d-4f98-4a7b-8184-aff3b203ddd7" type="GAMEROUTER:UNKNOW_MESSAGE"/>
+				<raise-error doc:name="Message type not supported" doc:id="9dd24c2d-4f98-4a7b-8184-aff3b203ddd7" type="GAMEROUTER:UNKNOW_MESSAGE"/>
 			</otherwise>
 		</choice>
 	</flow>
 	<flow name="actionMessage" doc:id="77339bbc-cbd4-45c0-83f0-c40b8bc0cb89">
-		<try doc:name="Try" doc:id="883937a9-fba9-47dc-b17e-11734aeb1223">
+		<try doc:name="Retrieve Game or Create it" doc:id="883937a9-fba9-47dc-b17e-11734aeb1223">
 			<os:retrieve doc:name="Game" doc:id="bebb2924-b522-4c55-9bcb-d750ebd1d053" key="#[vars.gameId]" objectStore="OS_Game" target="game" />
 			<error-handler>
 				<on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="32332d9b-1413-4d59-98ee-6893fd53d99a" type="OS:INVALID_KEY, OS:KEY_NOT_FOUND">
@@ -42,7 +42,7 @@ output application/json
 		</try>
 		<choice doc:name="Choice" doc:id="28c3e46e-820f-4086-a182-62377d347894">
 			<when expression='#[payload.data.action == "start"]'>
-				<ee:transform doc:name="Create Quiz" doc:id="5719e66a-8f48-42c1-a52c-a520af03b77f">
+				<ee:transform doc:name="Create Quiz and Start" doc:id="5719e66a-8f48-42c1-a52c-a520af03b77f">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -88,14 +88,14 @@ else // It's not a new record, we update this existing one
 					</ee:transform>
 			</when>
 			<otherwise>
-				<raise-error doc:name="Raise error" doc:id="2d7b8ca5-41a5-4ed0-b5b2-9d2657acf61a" type="GAMEROUTER:UNKNOW_MESSAGE" />
+				<raise-error doc:name="Action not supported" doc:id="2d7b8ca5-41a5-4ed0-b5b2-9d2657acf61a" type="GAMEROUTER:UNKNOW_MESSAGE" />
 			</otherwise>
 		</choice>
 		<os:store doc:name="Game" doc:id="5793d83d-c2d1-4b43-a06a-01252031ed48" key="#[vars.gameId]" objectStore="OS_Game" />
 		<flow-ref doc:name="sendStatus" doc:id="55fda49c-056f-4d7f-93fa-ce4a12d7bf49" name="sendStatus" />
 	</flow>
 	<flow name="chatMessage" doc:id="ee210d14-63eb-4191-8e56-2c4cf7eabbc2">
-		<os:retrieve doc:name="game" doc:id="1de3074c-5066-4149-afbd-68fae744e588" key="#[vars.gameId]" objectStore="OS_Game" target="game">
+		<os:retrieve doc:name="Game" doc:id="1de3074c-5066-4149-afbd-68fae744e588" key="#[vars.gameId]" objectStore="OS_Game" target="game">
 				<os:default-value><![CDATA[#[{
 	status:
 		status: "none"
@@ -110,7 +110,7 @@ fun norm(s) = lower(s as String) replace /[^a-z0-9]/ with &quot;&quot;
 (vars.game.status.status == 'started') and (norm(message) contains norm(answer))]" doc:name="rightAnswer" doc:id="67156410-660c-4844-8ae2-6f98c04e834f" variableName="rightAnswer" />
 		<choice doc:name="Choice" doc:id="15e13896-a744-450e-ab46-b5c21ff069f9">
 			<when expression="#[vars.rightAnswer]">
-				<ee:transform doc:name="Tag + Update Game" doc:id="d0a1aa84-d2a3-4312-aaad-27c95a6d3ce1">
+				<ee:transform doc:name="Tag message + Update Game" doc:id="d0a1aa84-d2a3-4312-aaad-27c95a6d3ce1">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -150,8 +150,8 @@ vars.game update {
 		</choice>
 	</flow>
 	<flow name="sendStatus" doc:id="dd8575b7-ec2b-48d1-85ef-a37dd7eac7d9">
-		<os:retrieve doc:name="game" doc:id="eee46167-5806-48ee-a55b-0262c39147ef" objectStore="OS_Game" key="#[vars.gameId]" />
-		<ee:transform doc:name="Transform Message" doc:id="56a45a68-dfcd-4626-a37f-92e911ff3d0a">
+		<os:retrieve doc:name="Game" doc:id="eee46167-5806-48ee-a55b-0262c39147ef" objectStore="OS_Game" key="#[vars.gameId]" />
+		<ee:transform doc:name="Filter on status only" doc:id="56a45a68-dfcd-4626-a37f-92e911ff3d0a">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -163,7 +163,7 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<websocket:broadcast doc:name="status" doc:id="c6b661c4-ec3f-4867-886b-699a18663623" config-ref="WebSockets_Config" path="#['/' ++ vars.gameId]">
+		<websocket:broadcast doc:name="Status" doc:id="c6b661c4-ec3f-4867-886b-699a18663623" config-ref="WebSockets_Config" path="#['/' ++ vars.gameId]">
 		</websocket:broadcast>
 	</flow>
 	<flow name="heartBeat" doc:id="f3955c6a-bfec-44e1-9b0b-bb94b781700b">
