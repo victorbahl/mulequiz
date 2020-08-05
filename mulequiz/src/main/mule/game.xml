@@ -173,10 +173,10 @@ output application/json
 			</scheduling-strategy>
 		</scheduler>
 		<os:retrieve-all-keys doc:name="Retrieve all keys" doc:id="31e11c15-d2ee-46c0-9421-04ba4a7129ad" objectStore="OS_Game" target="gameIds" />
-		<foreach doc:name="For Each" doc:id="0c4f5dc5-5635-49de-b235-7b1f227deaa1" collection="#[vars.gameIds]" counterVariableName="game">
+		<parallel-foreach doc:name="Parallel For Each" doc:id="4428c9c5-b55a-4ec1-8f94-e588497b3b95" collection="#[vars.gameIds]">
 			<set-variable value="#[payload]" doc:name="gameId" doc:id="0b8e7e86-8870-4155-9dd4-e027f6250d82" variableName="gameId" />
 			<flow-ref doc:name="updateTime" doc:id="7fe59180-6e5d-4dd5-947d-15b6592d9c36" name="updateTime" />
-		</foreach>
+		</parallel-foreach>
 	</flow>
 	<flow name="updateTime" doc:id="9ff0d229-b44d-4e4a-b97e-1d04392c9c05" >
 		<os:retrieve doc:name="Game" doc:id="9f8169a7-dd81-4b58-bf4a-90979b5cc180" key="#[vars.gameId]" objectStore="OS_Game" target="game" />
