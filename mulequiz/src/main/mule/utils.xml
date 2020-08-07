@@ -16,7 +16,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 output application/json
 ---
 payload mapObject (v,k,i) -> {
-	(k) : read(v,"application/json")
+	(k) : read(v,"application/json").status
 }
 ]]></ee:set-payload>
 			</ee:message>
