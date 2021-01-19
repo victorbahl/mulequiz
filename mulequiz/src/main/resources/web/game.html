@@ -31,7 +31,7 @@
           </div>
       </section>
       <section id="messages" ref="messages">
-        <div v-for="message in messages"><b>{{message.from.nickname}}</b>: {{message.text}} <span v-if="message.rightAnswer">&#x1F44C</span></div>
+        <div v-for="message in messages"><b><span v-if="message.from.sid == 'mB0t'">&#x1F984 </span> {{message.from.nickname}}</b>: {{message.text}} <span v-if="message.rightAnswer">&#x1F44C</span></div>
       </section>
       <section id="newmsg">
         <input type="text" v-on:keyup.enter="send" v-model="newmsg" placeholder="> Type a new message / answer here"/>

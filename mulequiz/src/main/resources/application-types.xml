@@ -52,6 +52,24 @@ type actionMessage = {|
 
 ]]></types:shape>
     </types:type>
+    <types:type name="chatMessage" format="json">
+      <types:shape format="weave" example="examples/chatMessage.json"><![CDATA[%dw 2.0
+
+type chatMessage = {|
+  "type": String, 
+  data: {|
+    from: {|
+      sid: String, 
+      nickname: String
+    |}, 
+    text: String, 
+    rightAnswer: Boolean
+  |}, 
+  sentAt: String
+|} {"example": "{\\\"type\\\":\\\"chat\\\",\\\"data\\\":{\\\"from\\\":{\\\"sid\\\":\\\"znhcp\\\",\\\"nickname\\\":\\\"Victor\\\"},\\\"text\\\":\\\"Hello World!\\\",\\\"rightAnswer\\\":false},\\\"sentAt\\\":\\\"2020-07-21T17:32:28.000Z\\\"}"}
+
+]]></types:shape>
+    </types:type>
   </types:catalog>
   <types:enrichment select="#32332d9b-1413-4d59-98ee-6893fd53d99a">
     <types:processor-declaration>
@@ -117,4 +135,22 @@ type actionMessage = {|
     </types:processor-declaration>
   </types:enrichment>
   <types:enrichment select="#cdeebcfc-159b-4ab4-a572-226c97478d09"/>
+  <types:enrichment select="#472bd812-8dbf-4e5b-893f-9fe42c3536cd">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="chatMessage"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#4f8a6de3-4193-4b9b-8125-c4fbcdf622ab">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="chatMessage"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
 </types:mule>

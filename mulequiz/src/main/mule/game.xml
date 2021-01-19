@@ -196,6 +196,27 @@ vars.game update {
 				<flow-ref doc:name="sendStatus" doc:id="51112c0b-e016-4177-8305-f920d0fa4ef6" name="sendStatus" />
 			</when>
 			<when expression="#[(vars.game.status.status == 'started') and (vars.game.status.timeLeft &lt;= 0)]">
+				<ee:transform doc:name="Message with answer" doc:id="4f8a6de3-4193-4b9b-8125-c4fbcdf622ab">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"type": 'chat',
+	data: {
+		from: {
+			sid: 'mB0t',
+			nickname: 'MuleBot'
+		},
+		text: 'The right answer was: ' ++ (vars.game.quiz.current.answer default ""),
+		rightAnswer: true
+	},
+	sentAt: now()
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<websocket:broadcast doc:name="Send answer" doc:id="472bd812-8dbf-4e5b-893f-9fe42c3536cd" config-ref="WebSockets_Config" path="#['/' ++ vars.gameId]">
+				</websocket:broadcast>
 				<flow-ref doc:name="nextQuestion" doc:id="f388de0f-e60d-42ef-84b3-e76f3d8cbd34" name="nextQuestion" />
 			</when>
 		</choice>
